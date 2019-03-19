@@ -1,0 +1,288 @@
+\documentclass[12pt]{article}
+
+
+% https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=2ahUKEwj9gfHZp6ngAhV3VxUIHf1ZBpYQFjABegQICBAC&url=http%3A%2F%2Fwww.bens.ws%2Fpapers%2FSchoofElkiesAtkinAlgorithm.pdf&usg=AOvVaw3YjeZq80997dE-o0TE0vNI
+% set font encoding for PDFLaTeX or XeLaTeX
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage{fontspec}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+  \usepackage[french]{babel}
+  \usepackage{amsmath,amsfonts,amssymb,amsthm,epsfig,epstopdf,,url,array,amssymb}
+  \usepackage{graphicx}
+  \frenchbsetup{StandardLists=true}
+  \usepackage{caption}
+  \usepackage{array}
+  \usepackage{graphics,graphicx}
+  \usepackage[usenames,dvipsnames]{pstricks}
+  \usepackage{calc}
+  \usepackage{multirow}
+  \usepackage{algorithmic}
+  \usepackage{algorithm}
+  \usepackage{appendix}
+  \usepackage{stmaryrd}
+  \usepackage{calrsfs}
+  \usepackage{tikz}
+  \usepackage{pgfplots}
+  \usepackage{mathabx}
+%  \usepackage{boondox-cal}
+  \usepackage{tikz}
+  \usetikzlibrary{decorations.pathmorphing}
+  \usetikzlibrary{decorations.pathreplacing}
+  \usetikzlibrary{decorations.shapes}
+  \usetikzlibrary{decorations.text}
+  \usetikzlibrary{decorations.markings}
+  \usetikzlibrary{decorations.footprints}
+  \usepackage{color}
+  \usepackage{geometry}
+	\geometry{hmargin=2.5cm,vmargin=2cm}
+  \usepackage{varioref}
+  \usepackage{listings}
+  \usepackage{calc}
+%  \usepackage[obeyspaces]{url}
+
+
+  \lstdefinelanguage{Sage}[]{Python}
+  {morekeywords={False,sage,True},sensitive=true}
+	\lstset{frame=none,
+  showtabs=False,
+  showspaces=False,
+  showstringspaces=False,
+  commentstyle={\ttfamily\color{dgreencolor}},
+  keywordstyle={\ttfamily\color{dbluecolor}\bfseries},
+  stringstyle={\ttfamily\color{dgraycolor}\bfseries},
+  language=Sage,
+  basicstyle={\fontsize{10pt}{10pt}\ttfamily},
+  aboveskip=0.3em,
+  belowskip=0.1em,
+  numbers=none,
+  numberstyle=\footnotesize,
+}
+\definecolor{dblackcolor}{rgb}{0.0,0.0,0.0}
+\definecolor{dbluecolor}{rgb}{0.01,0.02,0.7}
+\definecolor{dgreencolor}{rgb}{0.2,0.4,0.0}
+\definecolor{dgraycolor}{rgb}{0.30,0.3,0.30}
+\newcommand{\dblue}{\color{dbluecolor}\bf}
+\newcommand{\dred}{\color{dredcolor}\bf}
+\newcommand{\dblack}{\color{dblackcolor}\bf}
+
+\fi
+
+% $\genfrac(){}{0}{a}{b}$
+
+
+% used in maketitle
+\title{Compter les points sur une courbe elliptique}
+\author{Jérémie Coulaud}
+
+% Enable SageTeX to run SageMath code right inside this LaTeX file.
+% documentation: http://mirrors.ctan.org/macros/latex/contrib/sagetex/sagetexpackage.pdf
+%\usepackage{sagetex}
+
+\graphicspath{{../pictures/}}
+\DeclareMathOperator{\e}{e}
+\def\Tr{\mathop{\rm{Tr}}\nolimits}
+\def\bwp{{\bar \wp}}
+\def\bwp{{\bar {\wp'}}}
+\newcommand{\hsp}{\hspace{20pt}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+
+\newtheorem{prop}{Proposition}
+\newtheorem{defi}{Définition}
+\newtheorem{thm}{Théorème}
+%\maketitle
+\begin{titlepage}
+
+\begin{center}
+\textsc{\LARGE Université de Bordeaux} \\[2.0cm]
+
+\vspace{3cm}
+  % Title
+    \HRule \\[0.4cm]
+    { \huge \bfseries Insert title\\[0.4cm] }
+ \HRule \\[2cm]
+
+ \textsc{\large Rapport stage} \\[1.5cm]
+ \textsc{\large Master Cryptologie et sécurité informatique} \\[1.5cm]
+ \vspace{4cm}
+    % Author and supervisor
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+        Jérémie \textsc{Coulaud}\\
+      \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushright} \large
+        \emph{Tuteur :}  \textsc{}\\
+      \end{flushright}
+    \end{minipage}
+
+ \vfill
+    % Bottom of the page
+    {\large 2018-2019}
+\end{center}
+\end{titlepage}
+\newpage
+\tableofcontents
+\newpage
+\section{1}
+
+
+\subsection{Code de Gabidulin}
+Les codes de Gabidulins ont été introduit en 1985. Ils jouent un role important dans la conception de cryptosystèmes à clé publique basé sur la théorie des codes en métrique rang. On peut faire une analogie entre ces codes et les codes de Ree-Solomon en métrique de Hamming. Les codes de Gabidulin se reposent sur les $q$-polynômes.
+
+\begin{defi}
+On définit l'ensemble des $q$-polynomes sur $\mathbb{F}_{q^m}$ de la manière suivante :
+$$ \left\{ P(X)=\sum_{i \in \mathbb{N}} p_iX^{q^i} ,\, \text{ avec} (p_i) \in \mathbb{F}_{q^m}^{\mathbb{N}} \text{ de support fini}   \right\}$$
+\end{defi}
+On peut faire plusieurs remarques sur ces polynômes. Ils sont linéaires et forment un anneau non commutatif muni d'une loi d'addition et de composition.
+
+\begin{proof}
+\textbf{Linéarité:}
+$$P(\alpha + \beta) = \sum_{i \in \mathbb{N}} p_i(\alpha +\beta)^{q^i}$$
+On est dans un corps de caractéristique $q$, on peut appliquer le Frobenius:
+
+\begin{align*}
+P(\alpha + \beta) &= \sum_{i \in \mathbb{N}} p_i(\alpha^{q^i} +\beta^{q^i}) \\
+ &= P(\alpha) + P(\beta)
+\end{align*}
+
+\textbf{Non commutativité}
+Soit $P,Q$ deux $q$-polynômes.
+\begin{align*}
+ P \circ Q (X) &= P(\sum_{i \in \mathbb{N}} q_iX^{q^i}) \\
+  &= \sum_{i \in \mathbb{N}} q_i(\sum_{i \in \mathbb{N}} q_iX^{q^i})^{q^i}
+\end{align*}
+
+\end{proof}
+\begin{defi}
+Soit $k,n,m \in \mathbb{R}$ tel que $k \leq n \leq m$. On pose $g=(g_1, \ldots, g_n)$ une famille de vecteurs linéairement indépendnant de$\mathbb{F}_{q^m}$. Le code de Gabidulin $G(n,k,m)$ est le code suivant $[n,k]_{q^m}$:
+$$\left\{ P(g), deg_qP < k\right\}$$
+\newline
+On peut donner une matrice génératrice de ce code :
+\newline
+$$
+\begin{pmatrix}
+g_1 & \ldots & g_n \\
+g_1^q & \ldots & g_n^q \\
+\vdots & \ddots & \vdots \\
+g_1^{q^{k-1}} & \ldots & g_n^{q^{k-1}}
+\end{pmatrix}
+$$
+\end{defi}
+Ces codes permettent de décoder efficacement jusqu'à $\lfloor\dfrac{n-k}{2}\rfloor$ erreurs. Il est naturel de s'interesser au décodage de ces codes.
+Soit $G_g$ un code de Gabidulin de $\mathbb{F}_{q^m}$ de longeur $n$, de dimension $k$ et généré par un vecteur $g \in \mathbb{F}_{q^m}^n$.
+\begin{defi}[Decoding$(y,G_g,t)$]
+Trouver, s'il existe, $c \in G_g$ et $e$ avec $w(e) \leq t$ tel que $y = c + e$
+\end{defi}
+Pour résoudre ce problème de décodage on va utiliser la reconstruction de $q$-polynomal. Ce problème de reconstruction s'énonce de la manière suivante :
+
+\begin{defi}[Reconstruction$(y,g,k,t)$]
+Trouver un couple $(V,f)$ où $V$ est un $q$-polynôme non nul vérifiant $deg_q(V) \leq t$, et $f$ un $q$-polynôme avec $deg_q(f) < k$, tel que
+$$ V(y_i) = V \circ f(g_i), \quad \forall i \in [1,n]$$
+\end{defi}
+
+Si la capacité de correction $t$ du code vérifie $t \leq \lfloor \frac{n-k}{2} \rfloor$ alors la solution du problème de reconstruction est unique. On fait le lien entre décodage et reconstruction avec le théorème suivant :
+
+\begin{thm}
+Pour toute solution du problème de reconstruction on peut assocer une solution au problème de décodage en temps polynomial.
+\end{thm}
+
+\begin{proof}
+Soit $(V,f)$ une solution au problème \textbf{Reconstruction}$(y,g,k,t)$. Pour tout $i \in [1, \ldots, n]$ on a $V(y_i) = V \circ f(g_i)$. Or $V$ est un $q$-polynome, donc linéaire. Ainsi   $V(y_i - f(g_i)) = 0$. L'élément $e_i = y_i - f(g_i)$ appartient à un $\mathbb{F}_q$-espace-vectoriel de dimension au plus le degré de $V$, c'est à dire $t$. Le rang du vecteur $e = (e_1, \ldots, e_n)$ est de rang au plus $t$, et en posant $c=(f(g_1), \ldots, f(g_n))$ on a une solution au problème \textbf{Decoding}$(y, G_g,t)$ : $(c,e)$.
+\newline
+Toutes les transformations effectuées sont polynomiales.
+\end{proof}
+
+Dans le cas où $t \leq \lfloor \frac{n-k}{2} \rfloor$ on peut écrire une version équivalente de ce problème, mais qui présente l'avantage d'introduire des équiation linéaires.
+
+\begin{defi}[Reconstruction2$(y,g,k,t)$]
+Trouver un couple $(V,N)$ tel que $V$ est un $q$-polynôme non nul avec $deg_q(V) \leq t$ et $N$ un $q$-polynôme avec $deg_q(N) \leq k+t-1$ tel que:
+$$ V(y_i) = N(g_i), \quad \forall in \in [1,\ldots,n]$$
+\end{defi}
+
+\begin{thm}
+Si $(V,f)$ est une solution de \textbf{Reconstruction}$(y,g,k,t)$, alors $(V, V \circ f)$ est une solution de \textbf{Reconstruction2}$(y,g,k,t)$
+\end{thm}
+
+La description complète de l'algorithme de Décodage des codes de Gabidulin utilisant le problème \textbf{Reconstruction2} peut etre trouver ici [ref loidreau]
+
+
+\subsection{RQC}
+
+\subsubsection{Rappel théorique}
+
+\subsubsection{Public key encryption version (RQC.PKE)}
+Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable $C$ généré par $G \in \mathbb{F}_{q^m}^{k \times n}$ qui peut corriger au moins $\delta$ erreurs avec un algorithme efficace $C.Decode()$, ici c'est un code de Gabidulin. Et un code doublement circulant $[2n,n]$ aléatoire de matrice de parité $(1,h)$. On abouti au schéma suivant :
+
+\begin{figure}
+    \centering
+\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
+\begin{itemize}
+\item \textbf{Setup$(1^{\lambda})$}: génère les paramètres, et retourne param$=(n,k,\delta, w, w_r)$
+\item \textbf{KeyGen(param)}: génère $h \xleftarrow{\$} R$ la matrice génératrice de $C$, sk$=(x,y) \xleftarrow{\$} R^2$ tel que $x,y$ aient le même support de taille $w$ contenant $1$, pk$=(h, s=x+hy)$. Retourne $(pk,sk)$.
+\item \textbf{Encrypt(pk,m)}: génère $e \xleftarrow{\$}R$, $r=(r_1,r_2) \xleftarrow{\$} R^2$ tel que $e,r_1,r_2$ aient le même support de taille $w_r$. On pose $u = r_1 +h r_2$ et $v =mG+sr_2+e$. Retourne $c=(u,v)$
+\item \textbf{Decrypt(sk,c)}: Retourne $C.Decode(v-uy)$.
+\end{itemize}
+}}
+    \caption{RQC.PKE}
+    \label{fig:RQC.PKE}
+\end{figure}
+Ce schéma se base sur une approche développé par Aleckhnovich où on ne cache pas la structure du code $G$ qui est publique. Cela présente l'avantage de ne pas reposer en partie la sécurité du schéma sur ce code. L'inconvéniant étant que l'on doit générer deux chiffrés avec une tel approche.
+\newline
+Autre remarque, les vecteurs $x,y,r_1,r_2$ et $e$ sont de petit poids, alors que les vecteurs $h,s,u,v$ sont de grand poids.
+\paragraph{Validité:} On veut s'assurer que l'algorithme $C.decode$ permet bien de décoder $v-uy$, c'est à dire :
+$$\text{Decrypt(sk, Encrypt(pk,}m)) = m$$
+Ainsi,
+\begin{align*}
+    v - uy &= mG +xr_2 + hyr_2+e - r_1y - hyr_2 \\
+        &= mG + xr_2 - r_1y +e
+\end{align*}
+L'algorithme $C.decode$ va correctement décoder $v - uy$ lorsque :
+$$ w (mG + xr_2 - r_1y +e) \leq \delta $$
+De plus l'avantage de travailler en métrique rang plutot qu'en métrique de Hamming est que dans notre cas on n'a aucune erreur de décryptage. En effet, on a mis $1$ dans le support des vecteurs $x,y$, qu'on note $E$, et on note $F$ le support de $r_1, r_2$. Le support de $e$ sera inclu dans $\langle EF \rangle$. On peut donc borner le poids de $xr_2 - r_1y +e$ par $ww_r$. Notre algorithme décode des codes de Gabidulin et peut décoder jusqu'à $\frac{n-k}{2}$ erreurs. On va donc prendre nos paramètres tel que $ww_r \leq \frac{n-k}{2}$. Dans le cas on ne force pas $1$ dans le support de $x,y$ on aurait du majorer l'erreur par $ww_r + w_r = (w+1)w_r$.
+
+\paragraph{Sécurité:}
+On s'interesse a la sécurité de $RQC$ décrit ci-dessus, c'est a dire $RQC.PKE$
+\begin{thm}
+Le schéma $RQC.PKE$ est IND-CPA sous les hypothèses $2$-DRQCSD et $3$-DRQCSD
+\end{thm}
+
+Pour prouver la sécurité de ce schéma on va construire une suite de jeu, passant d'un adversaire recevant un chiffré d'un message $m_0$ à un adversaire recevant un chiffré d'un message $m_1$. L'idée est de montrer que si l'adversaires est capable de distinguer $m_0$ de $m_1$ alors il est capable de casser l'hypothèse DRQCSD.
+\newline
+On donne une explication informelle de cette preuve, le détails complet peut etre trouver ici [ref article]. On va créer une suite de jeu permettant de transformer un chiffré d'un message $m_0$ en un chiffré d'un message $m_1$, et deux jeux consécutifs ne peuvent pas etre distinguable sinon on casse nos hypothèses de sécurité. On peut quantifier la différence entre deux jeux consécutifs, ce qui nous permet de quantifier la différence entre le premier et dernier jeu et assurer la transitivé. La qualité de la réduction repose sur cette différence. Schématiquement on a:
+$$ G_0 \xrightarrow{\text{indistinguable}} G_1 \rightarrow \ldots \rightarrow G_5 \xrightarrow{\text{indistinguable}} G_6$$
+Le problème avec ce schéma est que l'on a uniquement une sécurité IND-CPA, ce qui est insuffisant pour de la cryptographie moderne, il faut alors transformer notre schéma pour arriver à une sécurité IND-CCA2.
+
+\subsubsection{KEM/DEM version (RQC.KEM)}
+Soit $\mathcal{E}$ une instance de RQC.PKE. Soit $\mathcal{G}, \mathcal{H}, \mathcal{K}$ des fonctions de hashage, par exemple SHA512 comme conseillé par le NIST. On peut définir notre schéma d'échange de clé $RQC.KEM$ de la facon suivante:
+
+\begin{figure}
+    \centering
+\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
+\begin{itemize}
+\item \textbf{Setup$(1^{\lambda})$}: comme $RQC.PKE$ avec l'espace des messages clairs de taille $k\times \geq 256$
+\item \textbf{KeyGen(param)}: comme $RQC.PKE$
+\item \textbf{Encapsulate(pk)}: génère graine pour la clé partagée $m\xleftarrow{\$} \mathbb{F}_{q^m}^k$. Dérive cet aléa $\theta \xleftarrow{\$} \mathcal{G}$password
+
+\item \textbf{Decrypt(sk,c)}:
+\end{itemize}
+}}
+    \caption{RQC.KEM}
+    \label{fig:my_RQC.KEM}
+\end{figure}
+
+
+
+
+
+\newpage
+%\bibliographystyle{plain}
+%\bibliography{biblio}
+
+\end{document}

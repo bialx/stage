@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/fixmp_test.dir/fixmp_test.o  -o fixmp_test -rdynamic -lgmp 

@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/mpfq_test_pm_7_e.dir/mpfq_test_pm_7_e.o  -o mpfq_test_pm_7_e -rdynamic -lgmp ../gfpe/libmpfq_pm_7_e.a ../gfp/libmpfq_pm_7.a 

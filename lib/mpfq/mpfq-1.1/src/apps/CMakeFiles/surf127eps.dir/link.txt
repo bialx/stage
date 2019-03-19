@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/surf127eps.dir/surf127eps.o  -o surf127eps -rdynamic ../gfp/libmpfq_p_127_735.a -lgmp 

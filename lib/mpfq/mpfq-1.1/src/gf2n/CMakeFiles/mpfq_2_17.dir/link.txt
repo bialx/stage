@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmpfq_2_17.a  CMakeFiles/mpfq_2_17.dir/mpfq_2_17.o
+/usr/bin/ranlib libmpfq_2_17.a

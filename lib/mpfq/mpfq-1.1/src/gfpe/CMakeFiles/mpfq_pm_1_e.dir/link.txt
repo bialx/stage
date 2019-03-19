@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmpfq_pm_1_e.a  CMakeFiles/mpfq_pm_1_e.dir/mpfq_pm_1_e.o
+/usr/bin/ranlib libmpfq_pm_1_e.a

@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/mpfq_test_2_41.dir/mpfq_test_2_41.o  -o mpfq_test_2_41 -rdynamic -lgmp ../gf2n/libmpfq_2_41.a 

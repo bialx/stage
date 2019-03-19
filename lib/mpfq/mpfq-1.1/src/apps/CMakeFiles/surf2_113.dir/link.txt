@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/surf2_113.dir/surf2_113.o  -o surf2_113 -rdynamic ../gf2n/libmpfq_2_113.a -lgmp 

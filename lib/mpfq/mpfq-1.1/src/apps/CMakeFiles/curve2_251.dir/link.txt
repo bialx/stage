@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/curve2_251.dir/curve2_251.o  -o curve2_251 -rdynamic ../gf2n/libmpfq_2_251.a -lgmp 

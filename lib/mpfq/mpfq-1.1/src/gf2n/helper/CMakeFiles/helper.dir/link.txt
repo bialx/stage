@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/helper.dir/helper.o CMakeFiles/helper.dir/wmat.o CMakeFiles/helper.dir/bitlinalg.o  -o helper -rdynamic 

@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/curve25519.dir/curve25519.o  -o curve25519 -rdynamic ../gfp/libmpfq_p_25519.a -lgmp 

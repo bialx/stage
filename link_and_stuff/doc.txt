@@ -1,0 +1,42 @@
+Arithmetic in Binary field
+http://www.lirmm.fr/~giorgi/PDF/HanMenVan_ch2.pdf
+
+Ms.ATOS-WORLDLINE@fr.adp.com
+
+detailed algo for reconstruction and decoding Gabidulin Code
+https://perso.univ-rennes1.fr/pierre.loidreau/articles/wcc_2005/Welch_Berlekamp.pdf
+
+doc sur fonction RANDOM du nist
+https://csrc.nist.gov/CSRC/media/Projects/Post-Quantum-Cryptography/documents/example-files/api-notes.pdf
+
+IND CCA KEM mechanism 
+https://eprint.iacr.org/2017/1096.pdf
+
+modular transfo IND CPA -> IND CCA
+https://eprint.iacr.org/2017/604.pdf
+
+comb with window 
+https://books.google.fr/books?id=YlRqCQAAQBAJ&pg=PA207&lpg=PA207&dq=High-Speed+Software+Multiplication+in+F2m&source=bl&ots=44uX6ScqzV&sig=ACfU3U3nraU06ovMLXIJcGLmAD2SDt58mA&hl=fr&sa=X&ved=2ahUKEwjn2aKh_Y3hAhUKM-wKHYQlAOUQ6AEwBXoECAUQAQ#v=onepage&q=High-Speed%20Software%20Multiplication%20in%20F2m&f=false
+
+Pour les mesures de temps :
+- Header time.h
+- Fonction clock_t()
+- printf("Time: %.2f ms\n", 1000 * (t2 - t1) / (double) CLOCKS_PER_SEC); 
+Fonction : 
+
+long long cpucycles(void) {
+  unsigned long long result;
+  __asm__ volatile(".byte 15;.byte 49;shlq $32,%%rdx;orq %%rdx,%%rax" : "=a" (result) ::  "%rdx");
+  return result;
+
+Affichage 
+printf("CPU Cycles: %lld CPU cycles\n", t2 - t1); 
+Pour temps : 
+clock_t t1 = clock_t()
+Ton code
+clock_t t2 = clock_t()
+Pour les cycles :
+
+  long long t5 = cpucycles();
+  Ton code
+  long long t6 = cpucycles();

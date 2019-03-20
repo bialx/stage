@@ -18,6 +18,7 @@ long long cpucycles(void) {
   return result;
 }
 
+
 int main() {
   ffi_elt n = 8;
   ffi_elt m = 15;
@@ -27,28 +28,4 @@ int main() {
   o = ffi_elt_add(o, n, m);
   long long t6 = cpucycles();
   printf("CPU Cycles: %lld CPU cycles\n", t6 - t5);
-
-/* TEST MPFQ */
-  mpfq_2_89_field field;
-
-  mp_limb_t Base = 10;
-  mpfq_2_89_field_setopt(field, MPFQ_IO_TYPE, &Base);
-
-  mpfq_2_89_elt elt1;
-  mpfq_2_89_elt elt2;
-
-  mpfq_2_89_init(field, elt1);
-  mpfq_2_89_init(field, elt2);
-
-  mpfq_2_89_sscan(field, elt1, "15");
-  mpfq_2_89_sscan(field, elt2, "30");
-
-  mpfq_2_89_add(field, elt1, elt1, elt2);
-
-  printf("La somme vaut %lu\n", *elt1);
-
-  // Memory management
-  mpfq_2_89_clear(field, elt1);
-  mpfq_2_89_clear(field, elt2);
-  // printf("%zu\n", o);
 }

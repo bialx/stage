@@ -13,8 +13,8 @@
 typedef uint64_t ffi_elt;
 
 ffi_elt ffi_elt_add(ffi_elt o, ffi_elt e1, ffi_elt e2);
-ffi_elt ffi_elt_sqr(ffi_elt *o, ffi_elt *e1, int size);
-
+ffi_elt ffi_elt_sqr1(ffi_elt *o, ffi_elt *e1, int size);
+ffi_elt ffi_elt_sqr2(ffi_elt *o, ffi_elt *e1, int size);
 
 
 

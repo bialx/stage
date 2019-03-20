@@ -15,7 +15,7 @@ c99: $(EXE1)
 avx: $(EXE2)
 
 $(EXE1): main_c99.o ffi_elt_c99.o
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LIB)
 
 $(EXE2): main_avx2.o
 	$(CC) $(CFLAGS) -o $@ $^

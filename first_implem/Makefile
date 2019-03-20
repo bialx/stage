@@ -1,6 +1,6 @@
 EXE1 = c
 EXE2 = a
-CFLAGS = -O3 -std=c99 -pedantic
+CFLAGS = -std=c99 -pedantic -mavx2
 
 MPFQ_SRC:=../lib/mpfq/src
 MPFQ_INCLUDE:=-I ../lib/mpfq/include
@@ -17,7 +17,7 @@ avx: $(EXE2)
 $(EXE1): main_c99.o ffi_elt_c99.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LIB)
 
-$(EXE2): main_avx2.o
+$(EXE2): main_avx2.o ffi_elt_avx2.o
 	$(CC) $(CFLAGS) -o $@ $^
 
 main_c99.o: main_c99.c ffi_elt.h

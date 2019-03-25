@@ -9,6 +9,7 @@
 \else
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
+  \usepackage{eepic}
   \usepackage{lmodern}
   \usepackage[french]{babel}
   \usepackage{amsmath,amsfonts,amssymb,amsthm,epsfig,epstopdf,,url,array,amssymb}
@@ -75,7 +76,7 @@
 
 
 % used in maketitle
-\title{Compter les points sur une courbe elliptique}
+\title{}
 \author{Jérémie Coulaud}
 
 % Enable SageTeX to run SageMath code right inside this LaTeX file.
@@ -262,25 +263,69 @@ Le problème avec ce schéma est que l'on a uniquement une sécurité IND-CPA, c
 \subsubsection{KEM/DEM version (RQC.KEM)}
 Soit $\mathcal{E}$ une instance de RQC.PKE. Soit $\mathcal{G}, \mathcal{H}, \mathcal{K}$ des fonctions de hashage, par exemple SHA512 comme conseillé par le NIST. On peut définir notre schéma d'échange de clé $RQC.KEM$ de la facon suivante:
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
 \noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
 \begin{itemize}
 \item \textbf{Setup$(1^{\lambda})$}: comme $RQC.PKE$ avec l'espace des messages clairs de taille $k\times \geq 256$
 \item \textbf{KeyGen(param)}: comme $RQC.PKE$
-\item \textbf{Encapsulate(pk)}: génère graine pour la clé partagée $m\xleftarrow{\$} \mathbb{F}_{q^m}^k$. Dérive cet aléa $\theta \xleftarrow{\$} \mathcal{G}$password
+\item \textbf{Encapsulate(pk)}: génère graine pour la clé partagée $m\xleftarrow{\$} \mathbb{F}_{q^m}^k$. Dérive cet aléa $\theta \xleftarrow{\$} \mathcal{G}$. Génère chiffré $c \leftarrow (u,v) = \mathcal{E}$.Encrypt(pk,m, $\theta$) et dérive la clé symétrique $K \leftarrow \mathcal{K}(m,c)$. Soit $d \leftarrow \mathcal{H}(m)$, on envoie $(c,d)$.
 
-\item \textbf{Decrypt(sk,c)}:
+\item \textbf{Decrypt(sk,c)}: Déchiffre $m' \leftarrow \mathcal{E}$.Decrypt(sk,c), calcule $\theta' \leftarrow \mathcal{G}(m')$ et on re chiffre $m'$ pour obtenir $c' \leftarrow \mathcal{E}$.Encrypt($pk, m', \theta')$. Si $c \ne c'$ ou $d \ne \mathcal{H}(m')$, alors on abandonne. Sinon la clé partagée est $K \leftarrow \mathcal{K}(m,c)$.
 \end{itemize}
 }}
     \caption{RQC.KEM}
     \label{fig:my_RQC.KEM}
 \end{figure}
 
+Cette version de $RQC $ est INDA-CCA2.
+
+\subsubsection{Un schéma de chiffrement hybride (RQC.HE)}
+
+On vient de voir précédemment qu'on a pu transformer un schéma de chiffrement IND-CPA (RQC.PKE) en un schéma d'échange de clé IND-CCA2 (RQC.KEM). Or on veut tout de meme garder un schéma de chiffrement, et pas uniquement faire de l'echange de clé. Le NIST a indiquer qu'ils appliqueraient des transformations génériques pour convertir les IND CCA2 KEM comme  RQC.KEM en IND CCA2 PKE.Le NIST n'a pas fourni de details supplémentaires sur ces transformation, on note la version de chiffrement RQC IND CCA2: RQC.HE.
+
+\section{Optimisation}
+
+\subsection{AVX}
+
+\subsubsection{Introduction}
+
+AMD et Intel ont incorporé un jeu d'instruction de l'architecture x86 dans leur CPU en 2011, l'AVX, pour Advanced Vector Extensions. Le but est de réaliser des opérations SIMD (single instruction, multiple data) pour effectuer des opération efficacement sur plusieurs valeurs à la fois.
+\newline
+Les processeurs X86-64 supportant l'avx possède $16$ registres de $256$ bits nommé YMM0-YMM15, la partie basse de ces registres ($128$ bits) correspond aux registres XMM. La plupart des instructions avx peuvent utiliser les registres YMM et XMM comme des opérateurs SIMD. La plupart des instructions \url{avx} utlisent trois opérateurs et se retrouvent sous cette forme:
+$$ \text{InstrMnemonic Des0p, Src0p1, SrcOp2} $$
+InstrMnemonic fait référence a la fonction qu'on va utliser, Des0p la déstination, et Src0p1, SrcOp2 les sources? Il est interessant de noter que les sources sont non-destructives, c'est a dire qu'au cours de l'execution de InstrMnemonic les sources ne sont pas modifiées.
 
 
-
-
+On peut illuster ca avec un exemple simple, additionner deux listes d'entiers sur $64$ bits, on initalise d'abord les paramètres:
+\medskip
+\begin{lstlisting}[language = c]
+  uint64_t tab1[4] = {1534345, 14300953, 104002000, 193294};
+  uint64_t tab2[4] = {4843838, 74646, 89878971, 77777777777};
+  uint64_t result[4] = {0};
+  __m256i a = _mm256_set_epi64x(1534345, 14300953, 104002000, 193294);
+  __m256i b = _mm256_set_epi64x(4843838, 74646, 89878971, 77777777777);
+  __m256i c;
+\end{lstlisting}
+Nos deux premiers tableau sont simplement des tableaux de $4$ entiers non signé codés sur $64$ bits. On veut l'équivalent en utilisant le jeu d'instruction avx2. On va mettre nos valeurs dans un vecteur de longueur $4$. En effet \url{__m256i} correspond à un vecteur pouvant contenir $256$ bits, soit $4$ \url{uint64_t}.
+La méthode classique pour additionner deux tableaux consistent a utiliser une boucle \url{for} pour les parcourir et additionner chaque élément:
+\medskip
+\begin{lstlisting}
+for(int i = 0; i < 4; ++i){
+    result[i] = tab1[i] + tab2[i];
+}
+\end{lstlisting}
+En utlisant avx2 on a tout simplement l'instruction suivante:
+\medskip
+\begin{lstlisting}
+c = _mm256_add_epi64(a, b);
+\end{lstlisting}
+Pour démontrer l'utiliser de telles instructions reste à comparer le temps d'execution de nos deux méthodes. On choisit de plutot afficher le nombre de cycle cpu pour réaliser la tache plutot qu'un temps en milliseconde. Il faut aussi penser à compiler avec le flag \url{-mavx2} de gcc pour activer l'avx2. On obtient les résultats suivant:
+\begin{lstlisting}
+CPU Cycles boucle: 468 CPU cycles
+CPU Cycles avx2: 76 CPU cycles
+\end{lstlisting}
+On voit bien le jeu d'instruction avx2 permet d'acceler certaines taches.
 \newpage
 %\bibliographystyle{plain}
 %\bibliography{biblio}

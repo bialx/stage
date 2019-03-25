@@ -1,4 +1,14 @@
 #include "ffi_elt.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int tab[16] = {0,1,4,5,16,17,20,21,64,65,68,69,80,81,84,85};
+int index[16] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+
+ffi_elt table_lookup[2] = {0x5554515045444140, 0x1514111005040100};
+ffi_elt mask[2] = {0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F};
+
+
 
 
 /**
@@ -15,27 +25,34 @@ ffi_elt ffi_elt_add(ffi_elt o, ffi_elt e1, ffi_elt e2){
 }
 
 
-ffi_elt ffi_elt_sqr1(ffi_elt *o, ffi_elt *e1, int size){
 
-  ffi_elt tmp1, tmp2, tmp3;
-  ffi_elt tab[16] = {0,1,4,5,16,17,21,20,64,65,68,69,80,81,85,84};
-  ffi_elt mask = 0;
+/**
+ * \fn ffi_elt ffi_elt_sqr1(fffi_elt *o, ffi_elt *e1, int size)
+ * \brief This functions squares a field element
+ *
+ * \param[out] o e1^2
+ * \param[in] e1 *uint64_t, list with size element uint64_t
+ * \param[in] size int
+ */
+void ffi_elt_sqr1(ffi_elt *o, ffi_elt *e1, int size){
 
-  for(int i = 0; i < size / 2; ++i){
-    tmp1 = e1[2*i];
-    tmp2 = tmp1 ^ mask;
-    tmp3 = (tmp1 >> 4) ^ mask;
+  ffi_elt tmp1,tmp2, tmp3;
+  //__uint128_t mask = 0x0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F;
+
+  for(int i = 0; i < 1; ++i){
+    printf("i:%d\n",i);
+    tmp1 = e1[i];
+    tmp2 = tmp1 & mask[0];
+    tmp3 = (tmp1 >> 4) & mask[0];
+  printf("mask:%ld\nal : %ld\ntmp2: %ld\nah: %ld\n", mask[0],tmp1,tmp2, tmp3);
+  tmp2 = tab[tmp2];
+  tmp3 = tab[tmp3];
+
   }
 }
 
-/**
- * \fn ffi_elt ffi_elt_sqr1(ffi_elt *o, ffi_elt *e1, int size)
- * \brief This functions squares a field element
- *
- * \param[out] o a^2
- * \param[in] e1 uint64_t
- * \param[in] size int
- */
+
+
 ffi_elt ffi_elt_sqr2(ffi_elt *o, ffi_elt *e1, int size){
   ffi_elt table[255] = {0, 32768, 8192, 40960, 2048, 34816, 10240, 43008, 512, 33280, 8704, 41472, 2560, 35328, 10752, 43520, 128, 32896, 8320, 41088,
     2176, 34944, 10368, 43136, 640, 33408, 8832, 41600, 2688, 35456, 10880, 43648, 32, 32800, 8224, 40992, 2080, 34848, 10272, 43040, 544, 33312, 8736,
@@ -48,14 +65,7 @@ ffi_elt ffi_elt_sqr2(ffi_elt *o, ffi_elt *e1, int size){
           674, 33442, 8866, 41634, 2722, 35490, 10914, 43682, 10, 32778, 8202, 40970, 2058, 34826, 10250, 43018, 522, 33290, 8714, 41482, 2570, 35338, 10762, 43530,
            138, 32906, 8330, 41098, 2186, 34954, 10378, 43146, 650, 33418, 8842, 41610, 2698, 35466, 10890, 43658, 42, 32810, 8234, 41002, 2090, 34858, 10282, 43050,
             554, 33322, 8746, 41514,2602, 35370, 10794, 43562, 170, 32938, 8362, 41130, 2218, 34986, 10410, 43178, 682, 33450, 8874, 41642, 2730, 35498, 10922};
-
   for(int i = 0; i < size; ++i){
     ffi_elt *tmp;
-
   }
-
-
-
-
-
  }

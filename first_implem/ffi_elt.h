@@ -14,14 +14,15 @@
 
 typedef uint64_t ffi_elt;
 
+
 ffi_elt ffi_elt_add(ffi_elt o, ffi_elt e1, ffi_elt e2);
-ffi_elt ffi_elt_sqr1(ffi_elt *o, ffi_elt *e1, int size);
+void ffi_elt_sqr1(ffi_elt *o, ffi_elt *e1, int size);
 ffi_elt ffi_elt_sqr2(ffi_elt *o, ffi_elt *e1, int size);
 
 
 
 void add(const float* a, const float* b);
-__m256 add_avx(__m256 a, __m256 b);
-
+__m256i add_avx(__m256i a, __m256i b);
+void square(uint64_t* a, int size);
 
 #endif

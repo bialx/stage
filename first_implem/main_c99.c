@@ -23,9 +23,15 @@ int main() {
   ffi_elt n = 8;
   ffi_elt m = 15;
   ffi_elt o;
+  ffi_elt o2[3] = {0};
 
+  ffi_elt a[1] = {31};
+  ffi_elt_sqr1(o2, a, 1);
   long long t5 = cpucycles();
   o = ffi_elt_add(o, n, m);
   long long t6 = cpucycles();
   printf("CPU Cycles: %lld CPU cycles\n", t6 - t5);
+
+
+
 }

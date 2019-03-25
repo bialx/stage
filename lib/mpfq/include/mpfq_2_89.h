@@ -549,10 +549,10 @@ int mpfq_2_89_sqrt(mpfq_2_89_dst_field K, mpfq_2_89_dst_elt r, mpfq_2_89_src_elt
         204, 205, 220, 221, 206, 207, 222, 223,
         236, 237, 252, 253, 238, 239, 254, 255,
     };
-    
+
     mpfq_2_89_elt sqrt_t ={ 0x200100002000UL, 0x80001UL, }
     ;
-    
+
     mpfq_2_89_elt odd, even;
     mpfq_2_89_elt_ur odd_t;
     mp_limb_t t;
@@ -610,9 +610,9 @@ void mpfq_2_89_pow(mpfq_2_89_dst_field k, mpfq_2_89_dst_elt res, mpfq_2_89_src_e
     mpfq_2_89_elt u, a;
     long i, j, lead;     /* it is a signed type */
     unsigned long mask;
-    
+
     assert (n>0);
-    
+
     /* get the correct (i,j) position of the most significant bit in x */
     for(i = n-1; i>=0 && x[i]==0; i--)
         ;
@@ -625,7 +625,7 @@ void mpfq_2_89_pow(mpfq_2_89_dst_field k, mpfq_2_89_dst_elt res, mpfq_2_89_src_e
     for( ; (x[i]&mask)==0 ;j--, mask>>=1)
         ;
     lead = i*64+j;      /* Ensured. */
-    
+
     mpfq_2_89_init(k, &u);
     mpfq_2_89_init(k, &a);
     mpfq_2_89_set(k, a, r);
@@ -728,7 +728,7 @@ void mpfq_2_89_longshift_left(unsigned long * dst, const unsigned long * src, in
     for(i = m-1 ; i>= 0 ; i--) {
         dst[i] = 0UL;
     }
-    
+
 }
 
 /* *Mpfq::gf2n::inversion::code_for_inv */
@@ -742,7 +742,7 @@ int mpfq_2_89_inv(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt r, mpfq_
     mp_limb_t x;
     mp_size_t ia, ib;
     int i,d;
-    
+
     if (mpfq_2_89_cmp_ui(K, s, 0UL) == 0)
         return 0;
     {
@@ -754,9 +754,9 @@ int mpfq_2_89_inv(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt r, mpfq_
     }
     ib = clzlx(b, 2);
     ia = 0;
-    
+
     mpfq_2_89_longshift_left(b,b,2,ib);
-    
+
     for(d = ib - ia ; ; ) {
             if (d == 0) {
                     for(i = 0 ; i < 2 ; i++) v[i] ^= u[i];
@@ -777,7 +777,7 @@ int mpfq_2_89_inv(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt r, mpfq_
                     ia += t;
                     d -= t;
                     mpfq_2_89_longshift_left(a,a,2,t);
-            } 
+            }
             if (d == 0) {
                     for(i = 0 ; i < 2 ; i++) u[i] ^= v[i];
             a[0] ^= b[0]; x = a[0];
@@ -971,7 +971,7 @@ void mpfq_2_89_mul_ur(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt_ur t
     __v2di t0;
     __v2di t1;
     __v2di t2;
-    
+
     __v2di g[16];
     /* sequence update walk */
     g[0] = (__v2di) { 0, };
@@ -990,7 +990,7 @@ void mpfq_2_89_mul_ur(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt_ur t
     g[13] = g[12] ^ g[1];
     g[14] = SHL(g[7], 1);
     g[15] = g[14] ^ g[1];
-    
+
     /* round 0 */
     u = g[s1[0]       & 15];
     t0  = u;
@@ -1024,7 +1024,7 @@ void mpfq_2_89_mul_ur(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt_ur t
     t0 ^= SHL(u, 56); t1 ^= SHR(u,  8);
     u = g[s1[0] >> 60 & 15];
     t0 ^= SHL(u, 60); t1 ^= SHR(u,  4);
-    
+
     /* round 1 */
     u = g[s1[1]       & 15];
     t1 ^= u;
@@ -1041,7 +1041,7 @@ void mpfq_2_89_mul_ur(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt_ur t
     u = g[s1[1] >> 24 & 1];
     t1 ^= SHL(u, 24); t2 ^= SHR(u, 40);
     /* end */
-    
+
     /* repair steps */
     /* repair section 200711-200803 */
     __v2di v1 = (__v2di) { s1[0] >> 1, s1[0] >> 1, };
@@ -1063,7 +1063,7 @@ void mpfq_2_89_mul_ur(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_elt_ur t
     t1 ^= v1 & w;
     v2 = SHR(v2, 1) & m;
     t2 ^= v2 & w;
-    
+
     /* store result */
     {
         {
@@ -1520,26 +1520,26 @@ void mpfq_2_89_vec_conv_ur_n(mpfq_2_89_dst_field K MAYBE_UNUSED, mpfq_2_89_dst_v
     mpfq_2_89_vec_conv_ur_n(K, w, u, v, n0);
     mpfq_2_89_vec_conv_ur_n(K, w + 2*n0, u + n0, v + n0, n1);
     mpfq_2_89_elt_ur_set_ui(K, w[2*n0-1], 0);
-    
+
     mpfq_2_89_vec tmpu, tmpv;
     mpfq_2_89_vec_ur tmpw;
     mpfq_2_89_vec_init(K, &tmpu, n1);
     mpfq_2_89_vec_init(K, &tmpv, n1);
     mpfq_2_89_vec_ur_init(K, &tmpw, 2*n1-1);
-    
+
     mpfq_2_89_vec_set(K, tmpu, u, n0);
-    if (n1 != n0) 
+    if (n1 != n0)
         mpfq_2_89_set_ui(K, tmpu[n0], 0);
     mpfq_2_89_vec_add(K, tmpu, tmpu, u+n0, n1);
     mpfq_2_89_vec_set(K, tmpv, v, n0);
-    if (n1 != n0) 
+    if (n1 != n0)
         mpfq_2_89_set_ui(K, tmpv[n0], 0);
     mpfq_2_89_vec_add(K, tmpv, tmpv, v+n0, n1);
     mpfq_2_89_vec_conv_ur_n(K, tmpw, tmpu, tmpv, n1);
     mpfq_2_89_vec_ur_sub(K, tmpw, tmpw, w, 2*n0-1);
     mpfq_2_89_vec_ur_sub(K, tmpw, tmpw, w + 2*n0, 2*n1-1);
     mpfq_2_89_vec_ur_add(K, w + n0, w + n0, tmpw, 2*n1-1);
-    
+
     mpfq_2_89_vec_clear(K, &tmpu, n1);
     mpfq_2_89_vec_clear(K, &tmpv, n1);
     mpfq_2_89_vec_ur_clear(K, &tmpw, 2*n1-1);
@@ -1843,7 +1843,7 @@ void mpfq_2_89_poly_gcd(mpfq_2_89_dst_field k MAYBE_UNUSED, mpfq_2_89_dst_poly g
      while (mpfq_2_89_poly_deg(k,b)>=0) {
       mpfq_2_89_poly_divmod(k,q,r,a,b);
       mpfq_2_89_poly_set(k,a,b);
-      mpfq_2_89_poly_set(k,b,r); 
+      mpfq_2_89_poly_set(k,b,r);
      }
      mpfq_2_89_poly_setmonic(k,g,a);
     mpfq_2_89_poly_clear(k,a);

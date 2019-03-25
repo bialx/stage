@@ -23,6 +23,6 @@ ffi_elt ffi_elt_sqr2(ffi_elt *o, ffi_elt *e1, int size);
 
 void add(const float* a, const float* b);
 __m256i add_avx(__m256i a, __m256i b);
-void square(uint64_t* a, int size);
+void square(uint64_t* o, uint64_t* a, int size);
 
 #endif

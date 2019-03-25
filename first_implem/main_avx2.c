@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "ffi_elt.h"
 
-#define NBR_TEST 10000
+#define NBR_TEST 1
 
 long long cpucycles(void) {
   unsigned long long result;
@@ -36,6 +36,7 @@ int main() {
   uint64_t tab1[4] = {1534345, 14300953, 104002000, 193294};
   uint64_t tab2[4] = {4843838, 74646, 89878971, 77777777777};
   uint64_t result[2] = {1152939096822257163, 65536};
+  uint64_t output[4] = {0};
   // __m256i a = _mm256_set_epi64x(1534345, 14300953, 104002000, 193294);
   // __m256i b = _mm256_set_epi64x(4843838, 74646, 89878971, 77777777777);
   // __m256i c;
@@ -52,9 +53,12 @@ int main() {
   long long int S = 0;
   for(int i = 0; i < NBR_TEST; ++i){
     long long t7 = cpucycles();
-    square(result, 2);
+    square(output, result, 2);
     long long t8 = cpucycles();
     S += (t8 - t7);
+  }
+  for(int i = 0; i < 5; ++i){
+    printf("output[%d]: %lu\n", i, output[i]);
   }
   // long long t7 = cpucycles();
   // square(result, 1);

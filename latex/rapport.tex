@@ -15,7 +15,7 @@
   \usepackage{amsmath,amsfonts,amssymb,amsthm,epsfig,epstopdf,,url,array,amssymb}
   \usepackage{graphicx}
   \frenchbsetup{StandardLists=true}
-  \usepackage{caption}
+  \usepackage{caption} 
   \usepackage{array}
   \usepackage{graphics,graphicx}
   \usepackage[usenames,dvipsnames]{pstricks}
@@ -30,7 +30,7 @@
   \usepackage{pgfplots}
   \usepackage{mathabx}
 %  \usepackage{boondox-cal}
-  \usepackage{tikz}
+  \usepackage{tikz}  
   \usetikzlibrary{decorations.pathmorphing}
   \usetikzlibrary{decorations.pathreplacing}
   \usetikzlibrary{decorations.shapes}
@@ -107,7 +107,7 @@
     \HRule \\[0.4cm]
     { \huge \bfseries Insert title\\[0.4cm] }
  \HRule \\[2cm]
-
+ 
  \textsc{\large Rapport stage} \\[1.5cm]
  \textsc{\large Master Cryptologie et sécurité informatique} \\[1.5cm]
  \vspace{4cm}
@@ -135,7 +135,7 @@
 
 
 \subsection{Code de Gabidulin}
-Les codes de Gabidulins ont été introduit en 1985. Ils jouent un role important dans la conception de cryptosystèmes à clé publique basé sur la théorie des codes en métrique rang. On peut faire une analogie entre ces codes et les codes de Ree-Solomon en métrique de Hamming. Les codes de Gabidulin se reposent sur les $q$-polynômes.
+Les codes de Gabidulins ont été introduit en 1985. Ils jouent un role important dans la conception de cryptosystèmes à clé publique basé sur la théorie des codes en métrique rang. On peut faire une analogie entre ces codes et les codes de Ree-Solomon en métrique de Hamming. Les codes de Gabidulin se reposent sur les $q$-polynômes. 
 
 \begin{defi}
 On définit l'ensemble des $q$-polynomes sur $\mathbb{F}_{q^m}$ de la manière suivante :
@@ -154,7 +154,7 @@ P(\alpha + \beta) &= \sum_{i \in \mathbb{N}} p_i(\alpha^{q^i} +\beta^{q^i}) \\
 \end{align*}
 
 \textbf{Non commutativité}
-Soit $P,Q$ deux $q$-polynômes.
+Soit $P,Q$ deux $q$-polynômes. 
 \begin{align*}
  P \circ Q (X) &= P(\sum_{i \in \mathbb{N}} q_iX^{q^i}) \\
   &= \sum_{i \in \mathbb{N}} q_i(\sum_{i \in \mathbb{N}} q_iX^{q^i})^{q^i}
@@ -168,7 +168,7 @@ $$\left\{ P(g), deg_qP < k\right\}$$
 On peut donner une matrice génératrice de ce code :
 \newline
 $$
-\begin{pmatrix}
+\begin{pmatrix} 
 g_1 & \ldots & g_n \\
 g_1^q & \ldots & g_n^q \\
 \vdots & \ddots & \vdots \\
@@ -177,7 +177,7 @@ g_1^{q^{k-1}} & \ldots & g_n^{q^{k-1}}
 $$
 \end{defi}
 Ces codes permettent de décoder efficacement jusqu'à $\lfloor\dfrac{n-k}{2}\rfloor$ erreurs. Il est naturel de s'interesser au décodage de ces codes.
-Soit $G_g$ un code de Gabidulin de $\mathbb{F}_{q^m}$ de longeur $n$, de dimension $k$ et généré par un vecteur $g \in \mathbb{F}_{q^m}^n$.
+Soit $G_g$ un code de Gabidulin de $\mathbb{F}_{q^m}$ de longeur $n$, de dimension $k$ et généré par un vecteur $g \in \mathbb{F}_{q^m}^n$. 
 \begin{defi}[Decoding$(y,G_g,t)$]
 Trouver, s'il existe, $c \in G_g$ et $e$ avec $w(e) \leq t$ tel que $y = c + e$
 \end{defi}
@@ -195,12 +195,12 @@ Pour toute solution du problème de reconstruction on peut assocer une solution 
 \end{thm}
 
 \begin{proof}
-Soit $(V,f)$ une solution au problème \textbf{Reconstruction}$(y,g,k,t)$. Pour tout $i \in [1, \ldots, n]$ on a $V(y_i) = V \circ f(g_i)$. Or $V$ est un $q$-polynome, donc linéaire. Ainsi   $V(y_i - f(g_i)) = 0$. L'élément $e_i = y_i - f(g_i)$ appartient à un $\mathbb{F}_q$-espace-vectoriel de dimension au plus le degré de $V$, c'est à dire $t$. Le rang du vecteur $e = (e_1, \ldots, e_n)$ est de rang au plus $t$, et en posant $c=(f(g_1), \ldots, f(g_n))$ on a une solution au problème \textbf{Decoding}$(y, G_g,t)$ : $(c,e)$.
+Soit $(V,f)$ une solution au problème \textbf{Reconstruction}$(y,g,k,t)$. Pour tout $i \in [1, \ldots, n]$ on a $V(y_i) = V \circ f(g_i)$. Or $V$ est un $q$-polynome, donc linéaire. Ainsi   $V(y_i - f(g_i)) = 0$. L'élément $e_i = y_i - f(g_i)$ appartient à un $\mathbb{F}_q$-espace-vectoriel de dimension au plus le degré de $V$, c'est à dire $t$. Le rang du vecteur $e = (e_1, \ldots, e_n)$ est de rang au plus $t$, et en posant $c=(f(g_1), \ldots, f(g_n))$ on a une solution au problème \textbf{Decoding}$(y, G_g,t)$ : $(c,e)$. 
 \newline
 Toutes les transformations effectuées sont polynomiales.
 \end{proof}
 
-Dans le cas où $t \leq \lfloor \frac{n-k}{2} \rfloor$ on peut écrire une version équivalente de ce problème, mais qui présente l'avantage d'introduire des équiation linéaires.
+Dans le cas où $t \leq \lfloor \frac{n-k}{2} \rfloor$ on peut écrire une version équivalente de ce problème, mais qui présente l'avantage d'introduire des équiation linéaires. 
 
 \begin{defi}[Reconstruction2$(y,g,k,t)$]
 Trouver un couple $(V,N)$ tel que $V$ est un $q$-polynôme non nul avec $deg_q(V) \leq t$ et $N$ un $q$-polynôme avec $deg_q(N) \leq k+t-1$ tel que:
@@ -219,14 +219,14 @@ La description complète de l'algorithme de Décodage des codes de Gabidulin uti
 \subsubsection{Rappel théorique}
 
 \subsubsection{Public key encryption version (RQC.PKE)}
-Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable $C$ généré par $G \in \mathbb{F}_{q^m}^{k \times n}$ qui peut corriger au moins $\delta$ erreurs avec un algorithme efficace $C.Decode()$, ici c'est un code de Gabidulin. Et un code doublement circulant $[2n,n]$ aléatoire de matrice de parité $(1,h)$. On abouti au schéma suivant :
+Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable $C$ généré par $G \in \mathbb{F}_{q^m}^{k \times n}$ qui peut corriger au moins $\delta$ erreurs avec un algorithme efficace $C.Decode()$, ici c'est un code de Gabidulin. Et un code doublement circulant $[2n,n]$ aléatoire de matrice de parité $(1,h)$. On abouti au schéma suivant : 
 
 \begin{figure}
     \centering
-\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
+\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{ 
 \begin{itemize}
 \item \textbf{Setup$(1^{\lambda})$}: génère les paramètres, et retourne param$=(n,k,\delta, w, w_r)$
-\item \textbf{KeyGen(param)}: génère $h \xleftarrow{\$} R$ la matrice génératrice de $C$, sk$=(x,y) \xleftarrow{\$} R^2$ tel que $x,y$ aient le même support de taille $w$ contenant $1$, pk$=(h, s=x+hy)$. Retourne $(pk,sk)$.
+\item \textbf{KeyGen(param)}: génère $h \xleftarrow{\$} R$ la matrice génératrice de $C$, sk$=(x,y) \xleftarrow{\$} R^2$ tel que $x,y$ aient le même support de taille $w$ contenant $1$, pk$=(h, s=x+hy)$. Retourne $(pk,sk)$. 
 \item \textbf{Encrypt(pk,m)}: génère $e \xleftarrow{\$}R$, $r=(r_1,r_2) \xleftarrow{\$} R^2$ tel que $e,r_1,r_2$ aient le même support de taille $w_r$. On pose $u = r_1 +h r_2$ et $v =mG+sr_2+e$. Retourne $c=(u,v)$
 \item \textbf{Decrypt(sk,c)}: Retourne $C.Decode(v-uy)$.
 \end{itemize}
@@ -234,12 +234,12 @@ Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable
     \caption{RQC.PKE}
     \label{fig:RQC.PKE}
 \end{figure}
-Ce schéma se base sur une approche développé par Aleckhnovich où on ne cache pas la structure du code $G$ qui est publique. Cela présente l'avantage de ne pas reposer en partie la sécurité du schéma sur ce code. L'inconvéniant étant que l'on doit générer deux chiffrés avec une tel approche.
+Ce schéma se base sur une approche développé par Aleckhnovich où on ne cache pas la structure du code $G$ qui est publique. Cela présente l'avantage de ne pas reposer en partie la sécurité du schéma sur ce code. L'inconvéniant étant que l'on doit générer deux chiffrés avec une tel approche. 
 \newline
 Autre remarque, les vecteurs $x,y,r_1,r_2$ et $e$ sont de petit poids, alors que les vecteurs $h,s,u,v$ sont de grand poids.
 \paragraph{Validité:} On veut s'assurer que l'algorithme $C.decode$ permet bien de décoder $v-uy$, c'est à dire :
 $$\text{Decrypt(sk, Encrypt(pk,}m)) = m$$
-Ainsi,
+Ainsi, 
 \begin{align*}
     v - uy &= mG +xr_2 + hyr_2+e - r_1y - hyr_2 \\
         &= mG + xr_2 - r_1y +e
@@ -254,7 +254,7 @@ On s'interesse a la sécurité de $RQC$ décrit ci-dessus, c'est a dire $RQC.PKE
 Le schéma $RQC.PKE$ est IND-CPA sous les hypothèses $2$-DRQCSD et $3$-DRQCSD
 \end{thm}
 
-Pour prouver la sécurité de ce schéma on va construire une suite de jeu, passant d'un adversaire recevant un chiffré d'un message $m_0$ à un adversaire recevant un chiffré d'un message $m_1$. L'idée est de montrer que si l'adversaires est capable de distinguer $m_0$ de $m_1$ alors il est capable de casser l'hypothèse DRQCSD.
+Pour prouver la sécurité de ce schéma on va construire une suite de jeu, passant d'un adversaire recevant un chiffré d'un message $m_0$ à un adversaire recevant un chiffré d'un message $m_1$. L'idée est de montrer que si l'adversaires est capable de distinguer $m_0$ de $m_1$ alors il est capable de casser l'hypothèse DRQCSD. 
 \newline
 On donne une explication informelle de cette preuve, le détails complet peut etre trouver ici [ref article]. On va créer une suite de jeu permettant de transformer un chiffré d'un message $m_0$ en un chiffré d'un message $m_1$, et deux jeux consécutifs ne peuvent pas etre distinguable sinon on casse nos hypothèses de sécurité. On peut quantifier la différence entre deux jeux consécutifs, ce qui nous permet de quantifier la différence entre le premier et dernier jeu et assurer la transitivé. La qualité de la réduction repose sur cette différence. Schématiquement on a:
 $$ G_0 \xrightarrow{\text{indistinguable}} G_1 \rightarrow \ldots \rightarrow G_5 \xrightarrow{\text{indistinguable}} G_6$$
@@ -265,13 +265,13 @@ Soit $\mathcal{E}$ une instance de RQC.PKE. Soit $\mathcal{G}, \mathcal{H}, \mat
 
 \begin{figure}[h!]
     \centering
-\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
+\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{ 
 \begin{itemize}
 \item \textbf{Setup$(1^{\lambda})$}: comme $RQC.PKE$ avec l'espace des messages clairs de taille $k\times \geq 256$
 \item \textbf{KeyGen(param)}: comme $RQC.PKE$
 \item \textbf{Encapsulate(pk)}: génère graine pour la clé partagée $m\xleftarrow{\$} \mathbb{F}_{q^m}^k$. Dérive cet aléa $\theta \xleftarrow{\$} \mathcal{G}$. Génère chiffré $c \leftarrow (u,v) = \mathcal{E}$.Encrypt(pk,m, $\theta$) et dérive la clé symétrique $K \leftarrow \mathcal{K}(m,c)$. Soit $d \leftarrow \mathcal{H}(m)$, on envoie $(c,d)$.
 
-\item \textbf{Decrypt(sk,c)}: Déchiffre $m' \leftarrow \mathcal{E}$.Decrypt(sk,c), calcule $\theta' \leftarrow \mathcal{G}(m')$ et on re chiffre $m'$ pour obtenir $c' \leftarrow \mathcal{E}$.Encrypt($pk, m', \theta')$. Si $c \ne c'$ ou $d \ne \mathcal{H}(m')$, alors on abandonne. Sinon la clé partagée est $K \leftarrow \mathcal{K}(m,c)$.
+\item \textbf{Decrypt(sk,c)}: Déchiffre $m' \leftarrow \mathcal{E}$.Decrypt(sk,c), calcule $\theta' \leftarrow \mathcal{G}(m')$ et on re chiffre $m'$ pour obtenir $c' \leftarrow \mathcal{E}$.Encrypt($pk, m', \theta')$. Si $c \ne c'$ ou $d \ne \mathcal{H}(m')$, alors on abandonne. Sinon la clé partagée est $K \leftarrow \mathcal{K}(m,c)$.   
 \end{itemize}
 }}
     \caption{RQC.KEM}
@@ -284,6 +284,68 @@ Cette version de $RQC $ est INDA-CCA2.
 
 On vient de voir précédemment qu'on a pu transformer un schéma de chiffrement IND-CPA (RQC.PKE) en un schéma d'échange de clé IND-CCA2 (RQC.KEM). Or on veut tout de meme garder un schéma de chiffrement, et pas uniquement faire de l'echange de clé. Le NIST a indiquer qu'ils appliqueraient des transformations génériques pour convertir les IND CCA2 KEM comme  RQC.KEM en IND CCA2 PKE.Le NIST n'a pas fourni de details supplémentaires sur ces transformation, on note la version de chiffrement RQC IND CCA2: RQC.HE.
 
+
+
+\section{Arithmétique dans les corps binaires}
+Mettre des rappels sur les corps en général ? 
+\newline
+On se place dans le cas d'une architecture $W$-bit ou $W$ est un multiple de $8$. En pratique on travaillera dans nos implémentation sur une architecture $64$-bit, mais pour présenter un peu la théorie générale on gardera $W$. Les bits d'un mot de $W$- bit sont numérotés de $0$ à $W-1$, avec le bits bit de poid faible à droite. On introduit les notations suivantes: 
+
+\vspace{1cm}
+\begin{figure}[h!]
+    \centering
+\begin{tabular}{|l|r|}
+  \hline
+  $\oplus, \&, |$ & Bitwise XOR, AND, OR \\
+  \hline
+  <<, >> & left and right bitwise shifs\\
+  \hline
+  interlo, interhi & byte interleaving \\
+  \hline
+  shuffle, lookup & byte shuffling \\
+  \hline
+\end{tabular}
+    \caption{Ensemble d'instruction nécessaire pour travailler sur les corps binaire}
+    \label{fig:set of instructions}
+\end{figure}
+
+
+\paragraph{Byte shuffling:} Prend en entrée deux registres $r_a = (a_0, \ldots, a_{15})$ et $r_b=(b_0, \ldots b_{15})$ et retourne le registre $r_c=(a_{b_o \pmod 16}, \ldots, a_{b_15 \pmod 16})$.
+
+\paragraph{Interleaving:} Prend en entrée deux registres et choisi alternativement de prendre un byte de la partie haute ou basse des deux registres.
+
+
+Il faut maintenant representer un polynome binaire en utilisant ce formatlisme. Soit $f(z)$ un polynôme binaire irréductible de degrée $m$, on écrit $f(z) = z^m + r(z)$. Les éléments de $\mathbb{F}_{2^m}$ sont les polynomes de degré au plus $m-1$, on travaille modulo $f(z)$. Un élément de ce corps est vu comme un vecteur binaire dont les éléments representent les coefficients du polynôme. 
+
+$$ a(z) = a_{m-1}z^{m-1} + \ldots + a_0 \longrightarrow a = (a_{m_1}, \ldots a_0}) $$
+
+On pose $t= \lceil m / W \rceil$ correspondant aux nombres de mots de $W-bit$ pour representer $a$. Au final on peut donner une structure de tableau à un élément du corps: $A= (A[t-1],\ldots ,A[1],A[0])$.
+
+\vspace{1cm}
+\begin{figure}[h!]
+    \begin{center}
+        
+\begin{tabular}{|l|c|c|r}
+$A[t-1]$ & & $A[1]$ & $A[0]$  \\
+\hline
+$a_{m-1}\ldots a_{(t-1)W}$ & $\ldots$ & $a_{2W-1}\ldots a_{W}$& $a_{W-1}\ldots a_{0}$     \\
+  \hline
+\end{tabular}
+
+  \caption{Réprensentation sous forme de tableau de mots de $W$-bit d'un élément de $\mathbb{F}_{2^m}$}
+  
+    \label{field element as an array}
+    \end{center}
+\end{figure}
+
+On donne un exemple en considérant le polynôme $a(z) = x^{40} + x^{35} + x^{30} + x^{5} + x +1$ sur une architecture $32$-bit. On va avoir besoin de $2$ mots de $32$ bits pour représenter ce polynôme. 
+
+\begin{align*}
+A[0] &= 01000000000000000000000000100011 = 1073741859 \\
+A[1] &= 00000000000000000000000100001000 = 264 \\
+A &= [264, 1073741859 ]
+\end{align*}
+
 \section{Optimisation}
 
 \subsection{AVX}
@@ -291,9 +353,9 @@ On vient de voir précédemment qu'on a pu transformer un schéma de chiffrement
 \subsubsection{Introduction}
 
 AMD et Intel ont incorporé un jeu d'instruction de l'architecture x86 dans leur CPU en 2011, l'AVX, pour Advanced Vector Extensions. Le but est de réaliser des opérations SIMD (single instruction, multiple data) pour effectuer des opération efficacement sur plusieurs valeurs à la fois.
-\newline
+\newline 
 Les processeurs X86-64 supportant l'avx possède $16$ registres de $256$ bits nommé YMM0-YMM15, la partie basse de ces registres ($128$ bits) correspond aux registres XMM. La plupart des instructions avx peuvent utiliser les registres YMM et XMM comme des opérateurs SIMD. La plupart des instructions \url{avx} utlisent trois opérateurs et se retrouvent sous cette forme:
-$$ \text{InstrMnemonic Des0p, Src0p1, SrcOp2} $$
+$$ \text{InstrMnemonic Des0p, Src0p1, SrcOp2} $$ 
 InstrMnemonic fait référence a la fonction qu'on va utliser, Des0p la déstination, et Src0p1, SrcOp2 les sources? Il est interessant de noter que les sources sont non-destructives, c'est a dire qu'au cours de l'execution de InstrMnemonic les sources ne sont pas modifiées.
 
 
@@ -313,21 +375,43 @@ La méthode classique pour additionner deux tableaux consistent a utiliser une b
 \begin{lstlisting}
 for(int i = 0; i < 4; ++i){
     result[i] = tab1[i] + tab2[i];
-}
+} 
 \end{lstlisting}
-En utlisant avx2 on a tout simplement l'instruction suivante:
+En utlisant avx2 on a tout simplement l'instruction suivante: 
 \medskip
 \begin{lstlisting}
 c = _mm256_add_epi64(a, b);
 \end{lstlisting}
-Pour démontrer l'utiliser de telles instructions reste à comparer le temps d'execution de nos deux méthodes. On choisit de plutot afficher le nombre de cycle cpu pour réaliser la tache plutot qu'un temps en milliseconde. Il faut aussi penser à compiler avec le flag \url{-mavx2} de gcc pour activer l'avx2. On obtient les résultats suivant:
+Pour démontrer l'utiliser de telles instructions reste à comparer le temps d'execution de nos deux méthodes. On choisit de plutot afficher le nombre de cycle cpu pour réaliser la tache plutot qu'un temps en milliseconde. On obtient les résultats suivant:
 \begin{lstlisting}
 CPU Cycles boucle: 468 CPU cycles
 CPU Cycles avx2: 76 CPU cycles
 \end{lstlisting}
-On voit bien le jeu d'instruction avx2 permet d'acceler certaines taches.
+On voit bien le jeu d'instruction avx2 permet d'acceler certaines taches. 
 \newpage
 %\bibliographystyle{plain}
 %\bibliography{biblio}
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

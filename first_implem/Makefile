@@ -30,9 +30,6 @@ ffi_elt_c99.o: ffi_elt_c99.c ffi_elt.h
 	$(CC) $(CFLAGS) -c $< $(LIB)
 
 
-
-
-
 clean:
 	rm -f *.o $(EXE1) $(EXE2)
 

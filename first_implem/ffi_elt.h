@@ -4,7 +4,8 @@
 #define FFI_ELT_H
 
 #define W_BITS 64
-#define NBR_TEST 10000000
+#define NBR_TEST 1
+// 0000000
 
 // #include "mpfq_2_89.h"
 

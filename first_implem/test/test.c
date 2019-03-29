@@ -74,18 +74,6 @@ int main() {
         if(output_square == NULL) exit(0);
         continue;
       }
-
-      if(choice == 0){
-        // printf("MARCHE");
-        input_square[i] = (uint64_t) ret;
-        i++;
-      }
-      if(choice == 1){
-        // printf("MARCHE");
-        output_square[i+(1*(size_o%2))] = (uint64_t) ret;
-        i++;
-      }
-
       if(buffer[0] == '-'){
         printf("SIZE -> %d %d\n", size_i, (size_o + size_o%2));
         square(output_square_c, input_square, size_i);
@@ -115,6 +103,19 @@ int main() {
         free(output_square_c);
         i = 0;
         continue;
+      }
+
+      if((choice == 0) && ((buffer[0] != '?') | (buffer[0] != '!') | (buffer[0] != '-')) ){
+        printf("MARCHE\n");
+        input_square[i] = (uint64_t) ret;
+        i++;
+      }
+      if(choice == 1 && ((buffer[0] != '?') | (buffer[0] != '!') | (buffer[0] != '-'))){
+        printf("MARCHE\n");
+        printf("WHERE I WRITE -> %d %d --- %d\n",i, size_o,i+(1*(size_o%2)));
+        printf("RET IS -> %ld\n",ret);
+        output_square[i+(1*(size_o%2))] = (uint64_t) ret;
+        i++;
       }
   }
 

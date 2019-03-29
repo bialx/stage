@@ -17,13 +17,13 @@ __m128i* malloc_m128(__m128i *output_square_c, int size){
 
 int main() {
   FILE* f_square = NULL;
-  FILE* f_root = NULL;
+  // FILE* f_root = NULL;
   char *ptr;
   char buffer[BUFFER_SIZE] = "";
   uint64_t *input_square = NULL;
   uint64_t *output_square = NULL;
-  uint64_t *input_root = NULL;
-  uint64_t *output_root = NULL;
+  // uint64_t *input_root = NULL;
+  // uint64_t *output_root = NULL;
   __m128i *output_square_c = NULL;
   int check = 0;
   int choice;
@@ -49,7 +49,7 @@ int main() {
         }
 
         if(input_square == NULL) exit(0);
-        for(int j = 0; j < size_o; j++){
+        for(int j = 0; j < size_i; j++){
           input_square[j] = 0;
         }
         output_square_c = malloc_m128(output_square_c, size_i);
@@ -101,7 +101,7 @@ int main() {
        /* END DISPLAY */
 
         for(int j = 0; j < size_i; j+=2){
-          if(output_square[j] != output_square_c[j][1] | output_square[j+1] != output_square_c[j][0]){
+          if((output_square[j] != output_square_c[j][1]) | (output_square[j+1] != output_square_c[j][0])){
             printf("CHECK -->%ld %lld %ld %lld\n",output_square[j],output_square_c[j][1],output_square[j+1],output_square_c[j][0]);
             check++;
           }

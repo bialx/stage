@@ -1,4 +1,4 @@
-︠a8e4e5dc-4734-47b2-b097-adf8aab53af9s︠
+
 def generator_exemple_square(size):
     K = GF(2)
     R.<x> = PolynomialRing(K)
@@ -43,15 +43,8 @@ def generator_exemple_square_root(size):
     l_even = [pos for pos, elt in enumerate(P_coeffs) if (pos%2 == 0 and elt ==1)]
     l_odd = [pos for pos, elt in enumerate(P_coeffs) if (pos%2 != 0 and elt ==1)]
     sqrt_even, sqrt_odd = list(map(lambda x: x/2, l_even)), list(map(lambda x: (x-1)/2, l_odd))
-    output1, output2 = sum([2^(size-pos) for pos in l_even]), sum([2^(size-pos) for pos in l_odd])
-    print P
-    print l_even, l_odd
-    print sqrt_even, sqrt_odd
+    output1, output2 = sum([2^(pos) for pos in sqrt_even]), sum([2^(pos) for pos in sqrt_odd])
     print "output is : ", output1, output2
 
-
-
-
-
-# generator_exemple_square(113)
-generator_exemple_square_root(15)
+generator_exemple_square(113)
+generator_exemple_square_root(80)

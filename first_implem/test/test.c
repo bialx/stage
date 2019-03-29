@@ -61,35 +61,39 @@ int main() {
         i = 0;
         if(size_o % 2 == 0 ){
           output_square = malloc(size_o * sizeof(uint64_t));
+          for(int j = 0; j < size_o; j++){
+            output_square[j] = 0;
+          }
         }
         if(size_o % 2 == 1 ){
-          size_o++;
-          output_square = malloc((size_o) * sizeof(uint64_t));
+          output_square = malloc((size_o+1) * sizeof(uint64_t));
+          for(int j = 0; j < size_o+1; j++){
+            output_square[j] = 0;
+          }
         }
         if(output_square == NULL) exit(0);
         continue;
-        for(int j = 0; j < size_o; j++){
-          output_square[j] = 0;
-        }
       }
 
       if(choice == 0){
+        // printf("MARCHE");
         input_square[i] = (uint64_t) ret;
         i++;
       }
       if(choice == 1){
-        output_square[i+1] = (uint64_t) ret;
+        // printf("MARCHE");
+        output_square[i+(1*(size_o%2))] = (uint64_t) ret;
         i++;
       }
 
       if(buffer[0] == '-'){
-        printf("SIZE -> %d %d\n", size_i, size_o);
+        printf("SIZE -> %d %d\n", size_i, (size_o + size_o%2));
         square(output_square_c, input_square, size_i);
         /* DISPLAY RESULT */
         for(int j = 0; j < size_i; j++){
          printf("input read from txt file -> %lu\n", input_square[j]);
        }
-        for(int j = 0; j < size_o; j++){
+        for(int j = 0; j < (size_o + size_o%2); j++){
          printf("output read from txt file -> %lu\n", output_square[j]);
         }
         for(int j = 0; j < size_i; j++){

@@ -20,11 +20,12 @@ void square(__m128i *o, uint64_t* a, int size){
    __m128i mask = _mm_set_epi64x(0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F);
    __m128i lookup_table = _mm_set_epi64x(0x5554515045444140, 0x1514111005040100);
 
-   for(int i = 0; i <= size/2; ++i){
-     printf("\ni :%d",i);
+   for(int i = 0; i <= size/2 ; ++i){
+      int j = i;
+     // printf("\ni :%d",i);
      /*  build a_0 = [0, a[i]] a 128-bit value */
      /*  a_l = a_0 & mask ; a_h = (a_0 >> 4) & mask */
-     __m128i a_0 = _mm_set_epi64x(a[i+1], a[i]);
+     __m128i a_0 = _mm_set_epi64x(a[i+1+j], a[i+j]);
      __m128i a_l = _mm_and_si128(a_0, mask);
      __m128i a_h = _mm_and_si128(_mm_srli_epi64(a_0, 4), mask);
 
@@ -59,8 +60,7 @@ void square_root(uint64_t* o, uint64_t* a, int size){
   uint64_t a_even = 0;
   uint64_t a_odd = 0;
 
-  for(int i = 0; i <= size/2 - 1; ++i){
-
+  for(int i = 0; i <= size/2; ++i){
     __m128i tmp = _mm_set_epi64x(a[i+1], a[i]);
     __m128i tmp1 = _mm_shuffle_epi8(tmp, perm);
 

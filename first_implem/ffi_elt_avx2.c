@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "ffi_elt.h"
-
-int table[16] = {0,1,4,5,16,17,21,20,64,65,68,69,80,81,84,85};
-
 
 __m256i add_avx(__m256i a, __m256i b) {
   return _mm256_add_epi64(a, b);
@@ -12,20 +7,44 @@ __m256i add_avx(__m256i a, __m256i b) {
 
 /*
 goal: compute a(z)^2 from a polynomial a(z) stored in a vector of size 64-bit word
-input: *o a vector containing a(z)^2, *a the polynomial to square, size -> size of a
+input: *o a vector containing a(z)^2 at the end of the algo, *a the polynomial to square, size -> size of a, its degree
 */
-void square(__m128i *o, uint64_t* a, int size){
+void square(__m128i *o, const uint64_t* a, int size){
   /* mask used to get split representation a = a_l + a_h*z^4
     lookup table -> store all the squares u(z)^2 of all 4-bits polynomials u(z)*/
    __m128i mask = _mm_set_epi64x(0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F);
    __m128i lookup_table = _mm_set_epi64x(0x5554515045444140, 0x1514111005040100);
 
-   for(int i = 0; i <= size/2 ; ++i){
+   for(int i = 0; i <= size/2 - 1 ; ++i){
       int j = i;
-     // printf("\ni :%d",i);
      /*  build a_0 = [0, a[i]] a 128-bit value */
      /*  a_l = a_0 & mask ; a_h = (a_0 >> 4) & mask */
      __m128i a_0 = _mm_set_epi64x(a[i+1+j], a[i+j]);
+     __m128i a_l = _mm_and_si128(a_0, mask);
+     __m128i a_h = _mm_and_si128(_mm_srli_epi64(a_0, 4), mask);
+
+     /*  Perform parallel table lookup */
+     a_l = _mm_shuffle_epi8(lookup_table, a_l);
+     a_h = _mm_shuffle_epi8(lookup_table, a_h);
+
+     /* Simulate addition with 8-bit offset */
+     o[2*i] = _mm_unpacklo_epi8(a_l, a_h);
+     o[2*i+1] = _mm_unpackhi_epi8(a_l, a_h);
+  }
+}
+
+
+/* Same as square(), justr trying load instead of set when building a_0 */
+void square2(__m128i *o, __m128i * a, int size){
+  /* mask used to get split representation a = a_l + a_h*z^4
+    lookup table -> store all the squares u(z)^2 of all 4-bits polynomials u(z)*/
+   __m128i mask = _mm_set_epi64x(0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F);
+   __m128i lookup_table = _mm_set_epi64x(0x5554515045444140, 0x1514111005040100);
+
+   for(int i = 0; i <= size/2 - 1; i++){
+     /*  build a_0 = [0, a[i]] a 128-bit value */
+     /*  a_l = a_0 & mask ; a_h = (a_0 >> 4) & mask */
+     __m128i a_0 =  _mm_stream_load_si128(&a[i]);
      __m128i a_l = _mm_and_si128(a_0, mask);
      __m128i a_h = _mm_and_si128(_mm_srli_epi64(a_0, 4), mask);
 
@@ -43,8 +62,8 @@ void square(__m128i *o, uint64_t* a, int size){
 goal: compute sqrt(a(z)) from a polynomial a(z) stored in a vector of size 64-bit word
 input: *o a vector containing sqrt(a(z)), *a the polynomial whose we want to compute its square root, size -> degree of a
 */
-void square_root(uint64_t* o, uint64_t* a, int size){
-  /* permutation mask to divide a 128-bit vlaue in bytes with and even indexes */
+void square_root(uint64_t* o, const uint64_t* a, int size){
+  /* permutation mask to divide a 128-bit value in bytes with odd and even indexes */
   __m128i perm = _mm_set_epi64x(0x0F0D0B0907050301, 0x0E0C0A0806040200);
 
   /* table to divide a low nibble in bits with odd and even indexes*/
@@ -60,7 +79,7 @@ void square_root(uint64_t* o, uint64_t* a, int size){
   uint64_t a_even = 0;
   uint64_t a_odd = 0;
 
-  for(int i = 0; i <= size/2; ++i){
+  for(int i = 0; i <= size/2 - 1; ++i){
     __m128i tmp = _mm_set_epi64x(a[i+1], a[i]);
     __m128i tmp1 = _mm_shuffle_epi8(tmp, perm);
 

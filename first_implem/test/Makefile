@@ -1,5 +1,5 @@
 EXE = test
-CFLAGS = -std=c99 -Wall -Wextra -pedantic -mavx2 -g
+CFLAGS = -std=c99 -pedantic -mavx2 -g
 
 
 AVX2_INCLUDE:=-I ../

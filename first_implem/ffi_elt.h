@@ -1,10 +1,14 @@
 #include <inttypes.h>
 #include <immintrin.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+
 #ifndef FFI_ELT_H
 #define FFI_ELT_H
 
 #define W_BITS 64
-#define NBR_TEST 10000000
+#define NBR_TEST 1
 
 // #include "mpfq_2_89.h"
 
@@ -23,7 +27,8 @@ ffi_elt ffi_elt_sqr2(ffi_elt *o, ffi_elt *e1, int size);
 
 /* Prototype of functions in ffi_elt_avx2.c */
 __m256i add_avx(__m256i a, __m256i b);
-void square(__m128i* o, uint64_t* a, int size);
-void square_root(uint64_t* o, uint64_t* a, int size);
+void square(__m128i* o, const uint64_t* a, int size);
+void square2(__m128i *o, __m128i* a, int size);
+void square_root(uint64_t* o, const uint64_t* a, int size);
 
 #endif

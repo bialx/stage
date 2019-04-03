@@ -1,6 +1,6 @@
 EXE1 = c
 EXE2 = a
-CFLAGS = -std=c99 -pedantic -mavx2
+CFLAGS = -std=c99 -O2 -pedantic -mavx2 -march=native
 
 MPFQ_SRC:=../lib/mpfq/src
 MPFQ_INCLUDE:=-I ../lib/mpfq/include
@@ -32,7 +32,6 @@ ffi_elt_c99.o: ffi_elt_c99.c ffi_elt.h
 
 clean:
 	rm -f *.o $(EXE1) $(EXE2)
-
 
 help:
 	@echo "Usage:"

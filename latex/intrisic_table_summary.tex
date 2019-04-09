@@ -1,0 +1,538 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{tabularx}
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{eepic}
+  \usepackage{lmodern}
+  \usepackage[french]{babel}
+  \setlength{\hoffset}{-18pt}  
+  \setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
+\setlength{\evensidemargin}{0pt} % Marge gauche sur pages paires     
+\setlength{\topmargin}{0pt}  
+  \usepackage{amsmath,amsfonts,amssymb,amsthm,epsfig,epstopdf,,url,array,amssymb}
+\begin{document}
+\title{Intrinsic Summary}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\section{SSE family}
+SSE - SSE2 -- SSE3 -- SSE4.1 -- SSS4.2, and only using instructions related to integers no matter what integer $\rightarrow \_\_$mmXXXi.
+\newline 
+Need \#include $<$emmintrin.h$>$
+\subsection{Set or eight}
+We can have the supplied values in reverse order with  \_mm\_setr\_epiX()
+\vspace{1cm}
+\begin{figure}[h!]
+\begin{tabular}{|l|r|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m128i \_mm\_set\_epi8(char $e_{15},\ldots$, char $e_0$) & Set 16 packed 8-bit integers in dst \\
+  \hline
+  \_\_m128i \_mm\_set\_epi16 (short $e_7, \ldots$, short $e_0$) & Set 8 packed 16-bit integers in dst.\\
+  \hline
+  \_\_m128i \_mm\_set\_epi32 (int $e_3, \ldots$, int $e_0$) & Set 4 packed 32-bit integers in dst  \\
+  \hline
+   \_\_m128i \_mm\_set\_epi64(\_\_m64, \_\_m64)  & Set 2 packed 64-bit integers in dst\\
+  \hline
+  \_\_m128i \_mm\_set\_epi64x(\_\_int64 e1, \_\_int64 e2)&Set 2 packed 64-bit integers in dst, works with uint64\\
+  \hline
+  \_\_m128i \_mm\_set1\_epi8(char a) & Broadcast 8-bit integer a to all elements of dst\\
+  \hline
+   \_\_m128i \_mm\_set1\_epi16(short a) & Broadcast 16-bit integer a to all all elements of dst.\\
+  \hline 
+   \_\_m128i \_mm\_set1\_epi32(int a) & Broadcast 32-bit integer a to all elements of dst.\\
+  \hline
+   \_\_m128i \_mm\_set1\_epi64(\_\_m64 a) & Broadcast 64-bit integer a to all elements of dst.\\
+  \hline
+  \_\_m128i \_mm\_set1\_epi64x(\_\_int64) & Broadcast 64-bit integer a to all elements of dst.\\
+  \hline
+  \_\_m128i \_mm\_setzero\_si128()& Return vector of type \_\_m128i with all elements set to zero.\\
+  \hline
+  \_\_m128i \_mm\_cvtsi32\_si128 (int a) & dst$[31:0] = a[31:0]$, dst$[127:32] = 0$ \\
+  \hline
+  \_\_m128i \_mm\_cvtsi64\_si128(\_\_int64 a) & dst$[63:0] = a[63:0]$, dst$[127:64] = 0$\\
+   \hline
+   \_\_m128i \_mm\_cvtsi64\_si128x (\_\_int64 a) & dst$[63:0] = a[63:0]$, dst$[127:64] = 0$\\
+   \hline
+\end{tabular}
+    \caption{Set with SSE and 128bits vectors}
+    \label{fig:set of set of 128instructions}
+\end{figure}
+
+\newpage
+\subsection{Load}
+If ALIGNED -> on 16-byte
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m128i \_mm\_lddqu\_si128(\_\_m128i const* mem\_addr) & Load 128-bitsfrom unaligned memory into dst. \\
+    \hline
+  \_\_m128i \_mm\_load\_si128(\_\_m128i const* mem\_addr)& Load 128-bits. Aligned on 16-byte \\  
+  \hline
+  \_\_m128i \_mm\_loadl\_epi64(\_\_m128i const* mem\_addr) & copy 64bits in $[63:0]$ and set to 0 the rest \\
+  \hline
+  \_\_m128i \_mm\_loadu\_si128(\_\_m128i const* mem\_addr)&Load 128-bits. Unaligned  \\  
+  \hline
+  \_\_m128i \_mm\_loadu\_si16 (void const* mem\_addr)& Load unaligned 16-bit into the first element of dst.\\  
+  \hline
+  \_\_m128i \_mm\_loadu\_si32 (void const* mem\_addr)&Load unaligned 32-bit into the first element of dst. \\  
+  \hline
+  \_\_m128i \_mm\_loadu\_si64 & Load unaligned 64-bit into the first element of dst.\\  
+  \hline
+  \_\_m128i \_mm\_stream\_load\_si128 (\_\_m128i * mem\_addr)& Load 128-bitsusing a non-temporal memory hint. Aligned \\  
+  \hline
+  
+\end{tabular}
+    \caption{load with SSE and 128bits vectors}
+    \label{fig:set of load 128 instructions}
+\end{figure}
+
+\subsection{Shift}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m128i \_mm\_bslli\_si128 (\_\_m128i a, int imm8) & Shift a left by imm8 bytes while shifting in zeros \\
+  \hline
+   \_\_m128i \_mm\_bsrli\_si128 (\_\_m128i a, int imm8) & Shift a right by imm8 bytes while shifting in zeros \\
+  \hline
+  \_\_m128i \_mm\_sll\_epi16 (\_\_m128i a, \_\_m128i count)& Shift 16-bit integers in a left by count while shifting in zeros\\
+  \hline
+  \_\_m128i \_mm\_sll\_epi32 (\_\_m128i a, \_\_m128i count)& Shift 32-bit integers in a left by count while shifting in zeros\\
+  \hline
+  \_\_m128i \_mm\_sll\_epi64 (\_\_m128i a, \_\_m128i count)& Shift 64-bit integers in a left by count while shifting in zeros\\
+  \hline
+  \_\_m128i \_mm\_slli\_epi16 (\_\_m128i a, int imm8)&Shift 16-bit integers in a left by imm8 while shifting in zeros \\
+  \hline
+  \_\_m128i \_mm\_slli\_epi32 (\_\_m128i a, int imm8)&Shift 32-bit integers in a left by imm8 while shifting in zeros \\
+  \hline
+  \_\_m128i \_mm\_slli\_epi64 (\_\_m128i a, int imm8)&Shift 64-bit integers in a left by imm8 while shifting in zeros \\
+  \hline
+  \_\_m128i \_mm\_slli\_epi128 (\_\_m128i a, int imm8)&Shift 128-bit integers in a left by imm8 while shifting in zeros \\
+  \hline
+\end{tabular}
+    \caption{shift with SSE and 128bits vectors}
+    \label{fig:set of shift 128 instructions}
+\end{figure}
+We have the same with \_\_m128i \_mm\_sra\_epi16 (\_\_m128i a, \_\_m128i count) where we shift a right by count  while shifting in sign bits, and store the results in dst. sra goes from epi16 to epi32. srai (uses int) from epi16 to 32. srl (uses count) from epi16 to 64. srli (uses int) from epi16 to 128.
+\newpage
+\subsection{XOR OR AND}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\_\_m128i \_mm\_and\_si128 (\_\_m128i a, \_\_m128i b) & Compute the bitwise AND of a and b \\
+\hline
+\_\_m128i \_mm\_andnot\_si128 (\_\_m128i a, \_\_m128i b) & Compute the bitwise NOT of a and then AND with b \\
+\hline
+\_\_m128i \_mm\_xor\_si128 (\_\_m128i a, \_\_m128i b) & Compute the bitwise XOR of a and b\\
+\hline 
+\_\_m128i \_mm\_or\_si128 (\_\_m128i a, \_\_m128i b) & Compute the bitwise OR of a and b.  \\
+
+  \hline
+\end{tabular}
+    \caption{XOR OR AND with SSE and 128bits vectors}
+    \label{fig:set of XOR OR AND 128 instructions}
+\end{figure}
+
+\newpage
+\subsection{Shuffle/table lookup}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabularx}{\linewidth}{|l|X|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+ \_\_m128i \_mm\_shuffle\_epi32 (\_\_m128i a, int imm8)& Shuffle 32-bit integers in a using the control in imm8\\
+ \hline
+  \_\_m128i \_mm\_shuffle\_epi8 (\_\_m128i a,\_\_m128i a)& Shuffle packed 8-bit integers in a according to shuffle control mask in the corresponding 8-bit element of b\\
+  \hline
+  \_\_m128i \_mm\_shuffle\_epi16 (\_\_m128i a, int imm8) & Shuffle 16-bit integers in the high 64 bits of a using the control in imm8. Store the results in the high 64 bits of dst, with the low 64 bits being copied from a to dst.\\
+  \hline
+  \_\_m128i \_mm\_shuffle\_epi16 (\_\_m128i a, int imm8) & Shuffle 16-bit integers in the low 64 bits of a using the control in imm8. Store the results in the low 64 bits of dst, with the high 64 bits being copied from a to dst.\\
+  \hline
+\end{tabularx}
+    \caption{Shuffle/table lookup with SSE and 128bits vectors}
+    \label{fig:set of XOR OR AND 128 instructions}
+\end{figure}
+
+\newpage
+\subsection{byte interleaving}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabularx}{\linewidth}{|l|X|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\_\_m128i \_mm\_unpackhi\_epi8 (\_\_m128i a, \_\_m128i b) & Unpack and interleave 8-bit integers from the high half of a and b \\
+\hline 
+\_\_m128i \_mm\_unpackhi\_epi16 (\_\_m128i a, \_\_m128i b) & Unpack and interleave 16-bit integers from the high half of a and b \\
+\hline 
+\_\_m128i \_mm\_unpackhi\_epi32 (\_\_m128i a, \_\_m128i b) & Unpack and interleave 32-bit integers from the high half of a and b \\
+\hline 
+\_\_m128i \_mm\_unpackhi\_epi64 (\_\_m128i a, \_\_m128i b) & Unpack and interleave 64-bit integers from the high half of a and b \\
+\hline 
+\end{tabularx}
+    \caption{Shuffle/table lookup with SSE and 128bits vectors}
+    \label{fig:set of byte interleaving 128 instructions}
+\end{figure}
+
+We have the exact same with \_\_m128i \_mm\_unpacklo\_epi8 (\_\_m128i a, \_\_m128i b) from epi8 to epi64.
+
+\newpage
+\section{AVX}
+\subsection{Link SSE-AVX}
+\_\_m128i \_mm256\_extractf128\_si256 (\_\_m256i a, const int imm8), Extract 128 bits (composed of integer data) from a, selected with imm8, and store the result in dst.
+
+
+\subsection{Set}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\_\_m256i \_mm256\_set\_epi8 (char $e_{31},\ldots,$ char $e_{0})$ & Set packed 8-bit integers in dst \\
+\_\_m256i \_mm256\_set\_epi16 (short $e_{15},\ldots,$ short $e_{0})$ & Set packed 16-bit integers in dst \\
+  \hline
+\_\_m256i \_mm256\_set\_epi32 (int $e_{7},\ldots,$ int $e_{0})$ & Set packed 32-bit integers in dst \\  
+\hline
+\_\_m256i \_mm256\_set\_epi64x (\_\_int64 $e_{3},\ldots,$ \_\_int64 $e_{0})$ & Set packed 32-bit integers in dst \\
+\hline
+\_\_m256i \_mm256\_set\_m128i (\_\_m128i hi, \_\_m128i lo) & Set packed \_\_m128i vectors in dst \\
+\hline
+  \_\_m256i \_mm\_set1\_epi8(char a) & Broadcast 8-bit integer a to all elements of dst\\
+  \hline
+   \_\_m256i \_mm\_set1\_epi16(short a) & Broadcast 16-bit integer a to all all elements of dst.\\
+  \hline 
+   \_\_m256i \_mm\_set1\_epi32(int a) & Broadcast 32-bit integer a to all elements of dst.\\
+  \hline
+  \_\_m256i \_mm\_set1\_epi64x(long long a) & Broadcast 64-bit integer a to all elements of dst.\\
+  \hline
+  \_\_m256i \_mm256\_setzero\_si256 (void) & Return vector of type \_\_m256i with all elements set to 0 \\
+  \hline
+\end{tabular}
+\caption{SET with AVX and 256bits vectors}
+\label{fig:set of set 256 avx2 instructions}
+\end{figure}
+
+
+
+\subsection{Load}
+Alignement is on 32bytes.  lddqu might be slightly more efficient thant loadu when the data crosses a cache line boundary.
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\_m256i \_mm256\_lddqu\_si256 (\_\_m256i const * mem\_addr) & Load 256-bits of unaligned memory into dst \\
+\hline
+ \_\_m256i \_mm256\_load\_si256 (\_\_m256i const * mem\_addr) & Load 256-bits of aligned memory into dst \\
+ \hline
+  \_\_m256i \_mm256\_load\_si256 (\_\_m256i const * mem\_addr) & Load 256-bits of unaligned memory into dst \\
+  \hline
+  \_\_m256i \_mm256\_loadu2\_m128i (\_\_m128i const* hiaddr, \_\_m128i const* loaddr) & Load two 128-bits unaligned and combine them into a 256-bit value in dst. \\
+  \hline
+  void \_mm256\_stream\_si256 (\_\_m256i * mem\_addr,\_\_m256i a) & Store 256-bits aligned using a non-temporal memory hint \\
+  \hline
+\end{tabular}
+\caption{LOAD with AVX and 256bits vectors}
+\label{fig:load AVX 256bits instructions}
+\end{figure}
+
+
+\newpage
+\subsection{Shift}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  
+  
+    \hline
+\end{tabular}
+\caption{shift with AVX and 256bits vectors}
+\label{fig:shift AVX 256bits instructions}
+\end{figure}
+
+\subsection{XOR OR AND}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\end{tabular}
+\caption{XOR OR AND with AVX and 256bits vectors}
+\label{fig:XOR OR AND AVX 256bits instructions}
+\end{figure}
+
+
+\subsection{Shuffle/table lookup}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m256i \_mm256\_permute2f128\_si256 (\_\_m256i a, \_\_m256i b, int imm8) &Shuffle 128-bits selected by imm8 from a and b, and store the results in dst.
+ \\
+    \hline
+\end{tabular}
+\caption{Shuffle/table lookup with AVX and 256bits vectors}
+\label{fig:Shuffle/table lookup AVX 256bits instructions}
+\end{figure}
+
+\newpage
+\section{AVX2}
+\subsection{Set}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m128i \_mm\_broadcastb\_epi8 (\_\_m128i a) & Broadcast the low packed 8-bit integer from a to all elements of dst. \\
+    \hline
+  \_\_m256i \_mm256\_broadcastb\_epi8 (\_\_m128i a) & Broadcast the low packed 8-bit integer from a to all elements of dst.\\
+  \hline
+  \_\_m128i \_mm\_broadcastd\_epi32 (\_\_m128i a) & Broadcast the low packed 32-bit integer from a to all elements of dst. \\ 
+    \hline
+    \_\_m256i \_mm256\_broadcastd\_epi32 (\_\_m128i a) & Broadcast the low packed 32-bit integer from a to all elements of dst.\\
+    \hline
+    \_\_m128i \_mm\_broadcastq\_epi64 (\_\_m128i a) & Broadcast the low packed 64-bit integer from a to all elements of dst. \\
+    \hline
+    \_\_m256i \_mm256\_broadcastq\_epi64 (\_\_m128i a) &  Broadcast the low packed 64-bit integer from a to all elements of dst \\
+    \hline
+   \_\_m256i \_mm\_broadcastsi128\_si256 (\_\_m128i a)  & Broadcast 128 bits of integer data from a to all 128-bit lanes in dst. \\
+    \hline
+  \_\_m256i \_mm256\_broadcastsi128\_si256 (\_\_m128i a)  & 
+Broadcast 128 bits of integer data from a to all 128-bit lanes in dst. \\
+\hline
+\_\_m128i \_mm\_broadcastw\_epi16 (\_\_m128i a) & Broadcast the low packed 16-bit integer from a to all elements of dst. \\
+\hline
+\_\_m256i \_mm256\_broadcastw\_epi16 (\_\_m128i a) & Broadcast the low packed 16-bit integer from a to all elements of dst.\\
+
+    \hline
+\end{tabular}
+\caption{SET with AVX and 256bits vectors}
+\label{fig:SET lookup AVX 256bits instructions}
+\end{figure}
+
+\subsection{Load}
+Alignement is on 32bytes.  lddqu might be slightly more efficient thant loadu when the data crosses a cache line boundary.
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\_\_m128i \_mm\_maskload\_epi32 (int const* mem\_addr, \_\_m128i mask) & Load 32-bit using mask \\
+  \hline
+  \_\_m256i \_mm256\_maskload\_epi32 (int const* mem\_addr, \_\_m256i mask) & Load 32-bitusing mask \\
+\_\_m128i \_mm\_maskload\_epi64 (\_\_int64 const* mem\_addr, \_\_m128i mask) &  Load 64-bit integers using mask \\
+\hline
+\_\_m256i \_mm256\_maskload\_epi64 (\_\_int64 const* mem\_addr, \_\_m256i mask) & Load 64-bit using mask \\
+\hline
+\_\_m256i \_mm256\_stream\_load\_si256 (\_\_m256i const* mem\_addr) & Load 256-bits aligned using a non-temporal memory hint \\
+
+
+  \hline
+\end{tabular}
+\caption{LOAD with AVX2 and 256bits vectors}
+\label{fig:load AVX2 256bits instructions}
+\end{figure}
+
+\newpage
+\subsection{Shift}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+\_\_m256i \_mm256\_bslli\_epi128 (\_\_m256i a, const int imm8) & Shift 128-bit lanes  left by imm8 bytes while shifting in zeros.\\
+\_\_m256i \_mm256\_bsrli\_epi128 (\_\_m256i a, const int imm8) & Shift 128-bit lanes right by imm8 bytes while shifting in zeros \\
+  \hline
+  \_\_m256i \_mm256\_sll\_epi16 (\_\_m256i a, \_\_m128i count) & Shift 16-bit left by count while shifting in zeros\\
+  \hline
+    \_\_m256i \_mm256\_sll\_epi32 (\_\_m256i a, \_\_m128i count) & Shift 32-bit left by count while shifting in zeros\\
+  \hline
+    \_\_m256i \_mm256\_sll\_epi64 (\_\_m256i a, \_\_m128i count) & Shift 64-bit left by count while shifting in zeros\\
+  \hline
+    \_\_m256i \_mm256\_slli\_epi16 (\_\_m256i a, int imm8) & Shift 16-bit left by imm8 while shifting in zeros\\
+  \hline
+    \_\_m256i \_mm256\_slli\_epi32 (\_\_m256i a, int imm8) & Shift 32-bit left by imm8 while shifting in zeros\\
+  \hline
+    \_\_m256i \_mm256\_slli\_epi64 (\_\_m256i a, int imm8) & Shift 64-bit left by imm8 while shifting in zeros\\
+  \hline
+  \_\_m256i \_mm256\_slli\_si256 (\_\_m256i a, const int imm8) & 
+Shift 128-bit lanes left by imm8 bytes while shifting in zeros\\
+  \hline
+ \_\_m128i \_mm\_sllv\_epi32 (\_\_m128i a, \_\_m128i count) & Shift 32-bit left by the amount specified by the corresponding element in count while shifting in zeros\\
+  \hline
+   \_\_m256i \_mm256\_sllv\_epi32 (\_\_m256i a, \_\_m256i count) & Shift 32-bit left by the amount specified by the corresponding element in count while shifting in zeros\\
+  \hline
+   \_\_m128i \_mm\_sllv\_epi64 (\_\_m128i a, \_\_m128i count) & Shift 64-bit left by the amount specified by the corresponding element in count while shifting in zeros\\
+  \hline
+     \_\_m256i \_mm256\_sllv\_epi64 (\_\_m256i a, \_\_m256i count) & Shift 64-bit left by the amount specified by the corresponding element in count while shifting in zeros\\
+  \hline
+  \_\_m256i \_mm256\_sra\_epi16 (\_\_m256i a, \_\_m128i count) & 
+Shift 16-bit right by count while shifting in sign bits \\
+\hline
+  \_\_m256i \_mm256\_sra\_epi32 (\_\_m256i a, \_\_m128i count) & 
+Shift 32-bit right by count while shifting in sign bits \\
+\hline
+\_\_m256i \_mm256\_srai\_epi16 (\_\_m256i a, int imm8) & Shift16-bit in a right by imm8 while shifting in sign bits\\
+\hline
+\_\_m256i \_mm256\_srai\_epi32 (\_\_m256i a, int imm8) & Shift 32-bit in a right by imm8 while shifting in sign bits\\
+\hline
+\_\_m128i \_mm\_srav\_epi32 (\_\_m128i a, \_\_m128i count) & 
+Shift 32-bit right by the amount specified by the corresponding element in count while shifting in sign bits\\
+\hline
+\_\_m256i \_mm256\_srav\_epi32 (\_\_m256i a, \_\_m256i count) & Shift 32-bit integers right by the amount specified by the corresponding element in count while shifting in sign bits\\
+\hline
+\_\_m256i \_mm256\_srl\_epi16 (\_\_m256i a, \_\_m128i count) & Shift 16-bit right by count while shifting in zeros\\
+\hline
+\_\_m256i \_mm256\_srl\_epi32 (\_\_m256i a, \_\_m128i count) & Shift 32-bit right by count while shifting in zeros\\
+\hline
+\_\_m256i \_mm256\_srl\_epi64 (\_\_m256i a, \_\_m128i count) & Shift 64-bit right by count while shifting in zeros\\
+\hline
+\_\_m256i \_mm256\_srli\_epi16 (\_\_m256i a, int imm8) & Shift 16-bit right by imm8 while shifting in zeros\\
+\hline 
+\_\_m256i \_mm256\_srli\_epi32 (\_\_m256i a, int imm8) & Shift 32-bit right by imm8 while shifting in zeros\\
+\hline 
+\_\_m256i \_mm256\_srli\_epi64 (\_\_m256i a, int imm8) & Shift 64-bit right by imm8 while shifting in zeros\\
+\hline 
+\_\_m256i \_mm256\_srli\_epi256 (\_\_m256i a, const int imm8) & Shift 18-bit lanes right by imm8 while shifting in zeros\\
+\hline 
+\_\_m128i \_mm\_srlv\_epi32 (\_\_m128i a, \_\_m128i count) & Shift 32-bit right by the amount specified by the corresponding element in count while shifting in zeros\\
+\hline
+\_\_m256i \_mm256\_srlv\_epi32 (\_\_m256i a, \_\_m256i count) & Shift 32-bit right by the amount specified by the corresponding element in count while shifting in zeros \\
+\hline
+\_\_m128i \_mm\_srlv\_epi64 (\_\_m128i a, \_\_m128i count) & Shift 64-bit right by the amount specified by the corresponding element in count while shifting in zeros\\
+\hline
+\_\_m256i \_mm256\_srlv\_epi64 (\_\_m256i a, \_\_m256i count) & Shift 64-bit right by the amount specified by the corresponding element in count while shifting in zeros \\
+\hline
+\end{tabular}
+\caption{shift with AVX2 and 256bits vectors}
+\label{fig:shift AVX2 256bits instructions}
+\end{figure}
+
+\newpage
+\subsection{XOR OR AND}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m256i \_mm256\_xor\_si256 (\_\_m256i a, \_\_m256i b) & Compute the bitwise XOR of 256 bits in a and b \\
+  \_\_m256i \_mm256\_or\_si256 (\_\_m256i a, \_\_m256i b) & Compute the bitwise OR of 256 bits in a and b\\
+    \hline
+    \_\_m256i \_mm256\_and\_si256 (\_\_m256i a, \_\_m256i b) & Compute the bitwise AND of 256 bits in a and b\\
+    \hline
+\end{tabular}
+\caption{XOR OR AND with AVX and 256bits vectors}
+\label{fig:XOR OR AND AVX2 256bits instructions}
+\end{figure}
+
+
+
+
+\subsection{Shuffle/table lookup}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m256i \_mm256\_permute2f128\_si256 (\_\_m256i a, \_\_m256i b, int imm8) &Shuffle 128-bits selected by imm8 from a and b, and store the results in dst.
+ \\
+  \_\_m256i \_mm256\_shuffle\_epi32 (\_\_m256i a, const int imm8) & Shuffle 32-bit in a within 128-bit lanes using the control in imm8 \\
+    \hline
+ \_\_m256i \_mm256\_shuffle\_epi8 (\_\_m256i a, \_\_m256i b) & Shuffle 8-bit a within 128-bit lanes according to shuffle control mask in the corresponding 8-bit element of b\\
+ \hline   
+ \_\_m256i \_mm256\_shufflehi\_epi16 (\_\_m256i a, const int imm8) & 
+Shuffle 16-bit in the high 64 bits of 128-bit lanes of a using the control in imm8. Store the results in the high 64 bits of 128-bit lanes of dst, with the low 64 bits of 128-bit lanes being copied from from a to dst.
+\\
+\hline
+\_\_m256i \_mm256\_shufflelo\_epi16 (\_\_m256i a, const int imm8) & 
+Shuffle 16-bit in the low 64 bits of 128-bit lanes of a using the control in imm8. Store the results in the low 64 bits of 128-bit lanes of dst, with the high 64 bits of 128-bit lanes being copied from from a to dst.
+\\
+\hline
+\end{tabular}
+\caption{Shuffle/table lookup with AVX and 256bits vectors}
+\label{fig:Shuffle/table lookup AVX2 256bits instructions}
+\end{figure}
+
+
+
+
+\subsection{byte interleaving}
+\vspace{1cm}
+\begin{figure}[h!]
+\noindent
+\noindent\begin{tabular}{|l|l|}
+  \hline
+  INTRINSIC & note \\
+  \hline
+  \_\_m256i \_mm256\_unpackhi\_epi8 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 8-bit integers from the high half of each 128-bit lane in a and b\\
+\hline
+\_\_m256i \_mm256\_unpackhi\_epi16 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 16-bit integers from the high half of each 128-bit lane in a and b\\
+\hline
+\_\_m256i \_mm256\_unpackhi\_epi32 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 32-bit integers from the high half of each 128-bit lane in a and b\\
+\hline
+\_\_m256i \_mm256\_unpackhi\_epi64 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 64-bit integers from the high half of each 128-bit lane in a and b\\
+\hline
+  \_\_m256i \_mm256\_unpacklo\_epi8 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 8-bit integers from the low half of each 128-bit lane in a and b\\
+\hline
+\_\_m256i \_mm256\_unpacklo\_epi16 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 16-bit integers from the low half of each 128-bit lane in a and b\\
+\hline
+\_\_m256i \_mm256\_unpacklo\_epi32 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 32-bit integers from the low half of each 128-bit lane in a and b\\
+\hline
+\_\_m256i \_mm256\_unpacklo\_epi64 (\_\_m256i a, \_\_m256i b) & Unpack and interleave 64-bit integers from the low half of each 128-bit lane in a and b\\
+\hline
+\end{tabular}
+    \caption{Byte interleaving with AVX2 and 256bits vectors}
+    \label{fig:Byte interleaving with AVX2 and 256bits vectors}
+\end{figure}
+
+
+
+
+
+
+
+
+
+\end{document}

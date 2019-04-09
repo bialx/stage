@@ -11,11 +11,12 @@
   \usepackage[utf8]{inputenc}
   \usepackage{eepic}
   \usepackage{lmodern}
+  \usepackage{minted}
   \usepackage[french]{babel}
   \usepackage{amsmath,amsfonts,amssymb,amsthm,epsfig,epstopdf,,url,array,amssymb}
   \usepackage{graphicx}
   \frenchbsetup{StandardLists=true}
-  \usepackage{caption} 
+  \usepackage{caption}
   \usepackage{array}
   \usepackage{graphics,graphicx}
   \usepackage[usenames,dvipsnames]{pstricks}
@@ -30,7 +31,7 @@
   \usepackage{pgfplots}
   \usepackage{mathabx}
 %  \usepackage{boondox-cal}
-  \usepackage{tikz}  
+  \usepackage{tikz}
   \usetikzlibrary{decorations.pathmorphing}
   \usetikzlibrary{decorations.pathreplacing}
   \usetikzlibrary{decorations.shapes}
@@ -38,6 +39,7 @@
   \usetikzlibrary{decorations.markings}
   \usetikzlibrary{decorations.footprints}
   \usepackage{color}
+\usepackage{xcolor}
   \usepackage{geometry}
 	\geometry{hmargin=2.5cm,vmargin=2cm}
   \usepackage{varioref}
@@ -60,8 +62,16 @@
   aboveskip=0.3em,
   belowskip=0.1em,
   numbers=none,
-  numberstyle=\footnotesize,
+  numberstyle=\footnotesize
 }
+
+\lstdefinestyle{Astyle}{
+  emptylines=1,
+  breaklines=true,
+  basicstyle=\ttfamily\color{black},
+  moredelim=**[is][\color{red}]{@}{@},
+}
+
 \definecolor{dblackcolor}{rgb}{0.0,0.0,0.0}
 \definecolor{dbluecolor}{rgb}{0.01,0.02,0.7}
 \definecolor{dgreencolor}{rgb}{0.2,0.4,0.0}
@@ -69,6 +79,31 @@
 \newcommand{\dblue}{\color{dbluecolor}\bf}
 \newcommand{\dred}{\color{dredcolor}\bf}
 \newcommand{\dblack}{\color{dblackcolor}\bf}
+
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=none,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    language=C
+}
 
 \fi
 
@@ -90,6 +125,7 @@
 \def\bwp{{\bar {\wp'}}}
 \newcommand{\hsp}{\hspace{20pt}}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\pgfplotsset{compat=1.15}
 
 \begin{document}
 
@@ -107,7 +143,7 @@
     \HRule \\[0.4cm]
     { \huge \bfseries Insert title\\[0.4cm] }
  \HRule \\[2cm]
- 
+
  \textsc{\large Rapport stage} \\[1.5cm]
  \textsc{\large Master Cryptologie et sécurité informatique} \\[1.5cm]
  \vspace{4cm}
@@ -135,7 +171,7 @@
 
 
 \subsection{Code de Gabidulin}
-Les codes de Gabidulins ont été introduit en 1985. Ils jouent un role important dans la conception de cryptosystèmes à clé publique basé sur la théorie des codes en métrique rang. On peut faire une analogie entre ces codes et les codes de Ree-Solomon en métrique de Hamming. Les codes de Gabidulin se reposent sur les $q$-polynômes. 
+Les codes de Gabidulins ont été introduit en 1985. Ils jouent un role important dans la conception de cryptosystèmes à clé publique basé sur la théorie des codes en métrique rang. On peut faire une analogie entre ces codes et les codes de Reed-Solomon en métrique de Hamming. Les codes de Gabidulin se reposent sur les $q$-polynômes.
 
 \begin{defi}
 On définit l'ensemble des $q$-polynomes sur $\mathbb{F}_{q^m}$ de la manière suivante :
@@ -154,7 +190,7 @@ P(\alpha + \beta) &= \sum_{i \in \mathbb{N}} p_i(\alpha^{q^i} +\beta^{q^i}) \\
 \end{align*}
 
 \textbf{Non commutativité}
-Soit $P,Q$ deux $q$-polynômes. 
+Soit $P,Q$ deux $q$-polynômes.
 \begin{align*}
  P \circ Q (X) &= P(\sum_{i \in \mathbb{N}} q_iX^{q^i}) \\
   &= \sum_{i \in \mathbb{N}} q_i(\sum_{i \in \mathbb{N}} q_iX^{q^i})^{q^i}
@@ -168,7 +204,7 @@ $$\left\{ P(g), deg_qP < k\right\}$$
 On peut donner une matrice génératrice de ce code :
 \newline
 $$
-\begin{pmatrix} 
+\begin{pmatrix}
 g_1 & \ldots & g_n \\
 g_1^q & \ldots & g_n^q \\
 \vdots & \ddots & \vdots \\
@@ -177,7 +213,7 @@ g_1^{q^{k-1}} & \ldots & g_n^{q^{k-1}}
 $$
 \end{defi}
 Ces codes permettent de décoder efficacement jusqu'à $\lfloor\dfrac{n-k}{2}\rfloor$ erreurs. Il est naturel de s'interesser au décodage de ces codes.
-Soit $G_g$ un code de Gabidulin de $\mathbb{F}_{q^m}$ de longeur $n$, de dimension $k$ et généré par un vecteur $g \in \mathbb{F}_{q^m}^n$. 
+Soit $G_g$ un code de Gabidulin de $\mathbb{F}_{q^m}$ de longeur $n$, de dimension $k$ et généré par un vecteur $g \in \mathbb{F}_{q^m}^n$.
 \begin{defi}[Decoding$(y,G_g,t)$]
 Trouver, s'il existe, $c \in G_g$ et $e$ avec $w(e) \leq t$ tel que $y = c + e$
 \end{defi}
@@ -195,12 +231,12 @@ Pour toute solution du problème de reconstruction on peut assocer une solution 
 \end{thm}
 
 \begin{proof}
-Soit $(V,f)$ une solution au problème \textbf{Reconstruction}$(y,g,k,t)$. Pour tout $i \in [1, \ldots, n]$ on a $V(y_i) = V \circ f(g_i)$. Or $V$ est un $q$-polynome, donc linéaire. Ainsi   $V(y_i - f(g_i)) = 0$. L'élément $e_i = y_i - f(g_i)$ appartient à un $\mathbb{F}_q$-espace-vectoriel de dimension au plus le degré de $V$, c'est à dire $t$. Le rang du vecteur $e = (e_1, \ldots, e_n)$ est de rang au plus $t$, et en posant $c=(f(g_1), \ldots, f(g_n))$ on a une solution au problème \textbf{Decoding}$(y, G_g,t)$ : $(c,e)$. 
+Soit $(V,f)$ une solution au problème \textbf{Reconstruction}$(y,g,k,t)$. Pour tout $i \in [1, \ldots, n]$ on a $V(y_i) = V \circ f(g_i)$. Or $V$ est un $q$-polynome, donc linéaire. Ainsi   $V(y_i - f(g_i)) = 0$. L'élément $e_i = y_i - f(g_i)$ appartient à un $\mathbb{F}_q$-espace-vectoriel de dimension au plus le degré de $V$, c'est à dire $t$. Le rang du vecteur $e = (e_1, \ldots, e_n)$ est de rang au plus $t$, et en posant $c=(f(g_1), \ldots, f(g_n))$ on a une solution au problème \textbf{Decoding}$(y, G_g,t)$ : $(c,e)$.
 \newline
 Toutes les transformations effectuées sont polynomiales.
 \end{proof}
 
-Dans le cas où $t \leq \lfloor \frac{n-k}{2} \rfloor$ on peut écrire une version équivalente de ce problème, mais qui présente l'avantage d'introduire des équiation linéaires. 
+Dans le cas où $t \leq \lfloor \frac{n-k}{2} \rfloor$ on peut écrire une version équivalente de ce problème, mais qui présente l'avantage d'introduire des équiation linéaires.
 
 \begin{defi}[Reconstruction2$(y,g,k,t)$]
 Trouver un couple $(V,N)$ tel que $V$ est un $q$-polynôme non nul avec $deg_q(V) \leq t$ et $N$ un $q$-polynôme avec $deg_q(N) \leq k+t-1$ tel que:
@@ -219,14 +255,14 @@ La description complète de l'algorithme de Décodage des codes de Gabidulin uti
 \subsubsection{Rappel théorique}
 
 \subsubsection{Public key encryption version (RQC.PKE)}
-Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable $C$ généré par $G \in \mathbb{F}_{q^m}^{k \times n}$ qui peut corriger au moins $\delta$ erreurs avec un algorithme efficace $C.Decode()$, ici c'est un code de Gabidulin. Et un code doublement circulant $[2n,n]$ aléatoire de matrice de parité $(1,h)$. On abouti au schéma suivant : 
+Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable $C$ généré par $G \in \mathbb{F}_{q^m}^{k \times n}$ qui peut corriger au moins $\delta$ erreurs avec un algorithme efficace $C.Decode()$, ici c'est un code de Gabidulin. Et un code doublement circulant $[2n,n]$ aléatoire de matrice de parité $(1,h)$. On abouti au schéma suivant :
 
 \begin{figure}
     \centering
-\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{ 
+\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
 \begin{itemize}
 \item \textbf{Setup$(1^{\lambda})$}: génère les paramètres, et retourne param$=(n,k,\delta, w, w_r)$
-\item \textbf{KeyGen(param)}: génère $h \xleftarrow{\$} R$ la matrice génératrice de $C$, sk$=(x,y) \xleftarrow{\$} R^2$ tel que $x,y$ aient le même support de taille $w$ contenant $1$, pk$=(h, s=x+hy)$. Retourne $(pk,sk)$. 
+\item \textbf{KeyGen(param)}: génère $h \xleftarrow{\$} R$ la matrice génératrice de $C$, sk$=(x,y) \xleftarrow{\$} R^2$ tel que $x,y$ aient le même support de taille $w$ contenant $1$, pk$=(h, s=x+hy)$. Retourne $(pk,sk)$.
 \item \textbf{Encrypt(pk,m)}: génère $e \xleftarrow{\$}R$, $r=(r_1,r_2) \xleftarrow{\$} R^2$ tel que $e,r_1,r_2$ aient le même support de taille $w_r$. On pose $u = r_1 +h r_2$ et $v =mG+sr_2+e$. Retourne $c=(u,v)$
 \item \textbf{Decrypt(sk,c)}: Retourne $C.Decode(v-uy)$.
 \end{itemize}
@@ -234,12 +270,12 @@ Le shcéma RQC que l'on va présenter va utiliser deux codes. Un code décodable
     \caption{RQC.PKE}
     \label{fig:RQC.PKE}
 \end{figure}
-Ce schéma se base sur une approche développé par Aleckhnovich où on ne cache pas la structure du code $G$ qui est publique. Cela présente l'avantage de ne pas reposer en partie la sécurité du schéma sur ce code. L'inconvéniant étant que l'on doit générer deux chiffrés avec une tel approche. 
+Ce schéma se base sur une approche développé par Aleckhnovich où on ne cache pas la structure du code $G$ qui est publique. Cela présente l'avantage de ne pas reposer en partie la sécurité du schéma sur ce code. L'inconvéniant étant que l'on doit générer deux chiffrés avec une tel approche.
 \newline
 Autre remarque, les vecteurs $x,y,r_1,r_2$ et $e$ sont de petit poids, alors que les vecteurs $h,s,u,v$ sont de grand poids.
 \paragraph{Validité:} On veut s'assurer que l'algorithme $C.decode$ permet bien de décoder $v-uy$, c'est à dire :
 $$\text{Decrypt(sk, Encrypt(pk,}m)) = m$$
-Ainsi, 
+Ainsi,
 \begin{align*}
     v - uy &= mG +xr_2 + hyr_2+e - r_1y - hyr_2 \\
         &= mG + xr_2 - r_1y +e
@@ -254,7 +290,7 @@ On s'interesse a la sécurité de $RQC$ décrit ci-dessus, c'est a dire $RQC.PKE
 Le schéma $RQC.PKE$ est IND-CPA sous les hypothèses $2$-DRQCSD et $3$-DRQCSD
 \end{thm}
 
-Pour prouver la sécurité de ce schéma on va construire une suite de jeu, passant d'un adversaire recevant un chiffré d'un message $m_0$ à un adversaire recevant un chiffré d'un message $m_1$. L'idée est de montrer que si l'adversaires est capable de distinguer $m_0$ de $m_1$ alors il est capable de casser l'hypothèse DRQCSD. 
+Pour prouver la sécurité de ce schéma on va construire une suite de jeu, passant d'un adversaire recevant un chiffré d'un message $m_0$ à un adversaire recevant un chiffré d'un message $m_1$. L'idée est de montrer que si l'adversaires est capable de distinguer $m_0$ de $m_1$ alors il est capable de casser l'hypothèse DRQCSD.
 \newline
 On donne une explication informelle de cette preuve, le détails complet peut etre trouver ici [ref article]. On va créer une suite de jeu permettant de transformer un chiffré d'un message $m_0$ en un chiffré d'un message $m_1$, et deux jeux consécutifs ne peuvent pas etre distinguable sinon on casse nos hypothèses de sécurité. On peut quantifier la différence entre deux jeux consécutifs, ce qui nous permet de quantifier la différence entre le premier et dernier jeu et assurer la transitivé. La qualité de la réduction repose sur cette différence. Schématiquement on a:
 $$ G_0 \xrightarrow{\text{indistinguable}} G_1 \rightarrow \ldots \rightarrow G_5 \xrightarrow{\text{indistinguable}} G_6$$
@@ -265,13 +301,13 @@ Soit $\mathcal{E}$ une instance de RQC.PKE. Soit $\mathcal{G}, \mathcal{H}, \mat
 
 \begin{figure}[h!]
     \centering
-\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{ 
+\noindent\fbox{\parbox{\linewidth-2\fboxrule-2\fboxsep}{
 \begin{itemize}
 \item \textbf{Setup$(1^{\lambda})$}: comme $RQC.PKE$ avec l'espace des messages clairs de taille $k\times \geq 256$
 \item \textbf{KeyGen(param)}: comme $RQC.PKE$
 \item \textbf{Encapsulate(pk)}: génère graine pour la clé partagée $m\xleftarrow{\$} \mathbb{F}_{q^m}^k$. Dérive cet aléa $\theta \xleftarrow{\$} \mathcal{G}$. Génère chiffré $c \leftarrow (u,v) = \mathcal{E}$.Encrypt(pk,m, $\theta$) et dérive la clé symétrique $K \leftarrow \mathcal{K}(m,c)$. Soit $d \leftarrow \mathcal{H}(m)$, on envoie $(c,d)$.
 
-\item \textbf{Decrypt(sk,c)}: Déchiffre $m' \leftarrow \mathcal{E}$.Decrypt(sk,c), calcule $\theta' \leftarrow \mathcal{G}(m')$ et on re chiffre $m'$ pour obtenir $c' \leftarrow \mathcal{E}$.Encrypt($pk, m', \theta')$. Si $c \ne c'$ ou $d \ne \mathcal{H}(m')$, alors on abandonne. Sinon la clé partagée est $K \leftarrow \mathcal{K}(m,c)$.   
+\item \textbf{Decrypt(sk,c)}: Déchiffre $m' \leftarrow \mathcal{E}$.Decrypt(sk,c), calcule $\theta' \leftarrow \mathcal{G}(m')$ et on re chiffre $m'$ pour obtenir $c' \leftarrow \mathcal{E}$.Encrypt($pk, m', \theta')$. Si $c \ne c'$ ou $d \ne \mathcal{H}(m')$, alors on abandonne. Sinon la clé partagée est $K \leftarrow \mathcal{K}(m,c)$.
 \end{itemize}
 }}
     \caption{RQC.KEM}
@@ -282,14 +318,14 @@ Cette version de $RQC $ est INDA-CCA2.
 
 \subsubsection{Un schéma de chiffrement hybride (RQC.HE)}
 
-On vient de voir précédemment qu'on a pu transformer un schéma de chiffrement IND-CPA (RQC.PKE) en un schéma d'échange de clé IND-CCA2 (RQC.KEM). Or on veut tout de meme garder un schéma de chiffrement, et pas uniquement faire de l'echange de clé. Le NIST a indiquer qu'ils appliqueraient des transformations génériques pour convertir les IND CCA2 KEM comme  RQC.KEM en IND CCA2 PKE.Le NIST n'a pas fourni de details supplémentaires sur ces transformation, on note la version de chiffrement RQC IND CCA2: RQC.HE.
+On vient de voir précédemment qu'on a pu transformer un schéma de chiffrement IND-CPA (RQC.PKE) en un schéma d'échange de clé IND-CCA2 (RQC.KEM). Or on veut tout de meme garder un schéma de chiffrement, et pas uniquement faire de l'echange de clé. Le NIST a indiqué qu'ils appliqueraient des transformations génériques pour convertir les IND CCA2 KEM comme  RQC.KEM en IND CCA2 PKE. On note la version de chiffrement RQC IND CCA2: RQC.HE.
 
 
 
 \section{Arithmétique dans les corps binaires}
-Mettre des rappels sur les corps en général ? 
-\newline
-On se place dans le cas d'une architecture $W$-bit ou $W$ est un multiple de $8$. En pratique on travaillera dans nos implémentation sur une architecture $64$-bit, mais pour présenter un peu la théorie générale on gardera $W$. Les bits d'un mot de $W$- bit sont numérotés de $0$ à $W-1$, avec le bits bit de poid faible à droite. On introduit les notations suivantes: 
+Mettre des rappels sur les corps en général ?
+\subsection{Notations}
+On se place dans le cas d'une architecture $W$-bit ou $W$ est un multiple de $8$. En pratique on travaillera dans nos implémentation sur une architecture $64$-bit, mais pour présenter un peu la théorie générale on gardera $W$. Les bits d'un mot de $W$- bit sont numérotés de $0$ à $W-1$, avec le bits bit de poid faible à droite. On introduit les notations suivantes:
 
 \vspace{1cm}
 \begin{figure}[h!]
@@ -310,22 +346,32 @@ On se place dans le cas d'une architecture $W$-bit ou $W$ est un multiple de $8$
 \end{figure}
 
 
-\paragraph{Byte shuffling:} Prend en entrée deux registres $r_a = (a_0, \ldots, a_{15})$ et $r_b=(b_0, \ldots b_{15})$ et retourne le registre $r_c=(a_{b_o \pmod 16}, \ldots, a_{b_15 \pmod 16})$.
+\paragraph{Byte shuffling:} Prend en entrée deux registres $r_a = (a_0, \ldots, a_{15})$ et $r_b=(b_0, \ldots b_{15})$ et retourne le registre $r_c=(a_{b_o \pmod{16}}, \ldots, a_{b_{15} \pmod{16}})$.
 
-\paragraph{Interleaving:} Prend en entrée deux registres et choisi alternativement de prendre un byte de la partie haute ou basse des deux registres.
+\paragraph{Interleaving:} Prend en entrée deux registres et choisi alternativement de prendre un byte de la partie haute ou basse des deux registres. Par exemple admettons qu'on dispose des deux registres suivant de 128-bits:
+\begin{align*}
+    r_a &= a_{15}\ldots a_{1}a_{0} = a_{15}^{1}a_{15}^{0}\ldots a_{0}^1a_{0}^0\\
+    r_b &= b_{15}\ldots b_{1}b_{0} = b_{15}^{1}b_{15}^{0}\ldots b_{0}^1b_{0}^0\\
+\end{align*}
+Ou chacun des $a_i, b_i$ est sur $8$-bits et les $a_i^{1}, a_i^0, b_i^{1}, b_i^0$ sur $4$ bits correspondant respectivement à la partie haute et à la partie basse des $a_i, b_i$.
+\newline
+L'opération interlo($r_a, r_b)$ retourne le vecteur de $128$-bits:
+$$ r_c = b_{15}^{0} a_{15}^{0}\ldots b_{1}^0a_{1}^0b_{0}^0a_{0}^0$$
+et interhi($r_a, r_b)$:
+$$ r_c = b_{15}^{1} a_{15}^{1} \ldots b_{1}^1a_{1}^1b_{0}^01a_{0}^1$$
+\medskip
+Il faut maintenant representer un polynome binaire en utilisant ce formalisme. Soit $f(z)$ un polynôme binaire irréductible de degrée $m$, on écrit $f(z) = z^m + r(z)$. Les éléments de $\mathbb{F}_{2^m}$ sont les polynomes de degré au plus $m-1$, on travaille modulo $f(z)$. Un élément de ce corps est vu comme un vecteur binaire dont les éléments representent les coefficients du polynôme.
 
+$$ a(z) = a_{m-1}z^{m-1} + \ldots + a_0 \longrightarrow a = (a_{m_1}, \ldots a_0) $$
 
-Il faut maintenant representer un polynome binaire en utilisant ce formatlisme. Soit $f(z)$ un polynôme binaire irréductible de degrée $m$, on écrit $f(z) = z^m + r(z)$. Les éléments de $\mathbb{F}_{2^m}$ sont les polynomes de degré au plus $m-1$, on travaille modulo $f(z)$. Un élément de ce corps est vu comme un vecteur binaire dont les éléments representent les coefficients du polynôme. 
-
-$$ a(z) = a_{m-1}z^{m-1} + \ldots + a_0 \longrightarrow a = (a_{m_1}, \ldots a_0}) $$
-
-On pose $t= \lceil m / W \rceil$ correspondant aux nombres de mots de $W-bit$ pour representer $a$. Au final on peut donner une structure de tableau à un élément du corps: $A= (A[t-1],\ldots ,A[1],A[0])$.
+On pose $t= \lceil m / W \rceil$ correspondant aux nombres de mots de $W$-bits pour representer $a$. Au final on peut donner une structure de tableau à un élément du corps: $A= (A[t-1],\ldots ,A[1],A[0])$.
 
 \vspace{1cm}
 \begin{figure}[h!]
     \begin{center}
-        
-\begin{tabular}{|l|c|c|r}
+
+\begin{tabular}{|l|c|c|r|}
+\hline
 $A[t-1]$ & & $A[1]$ & $A[0]$  \\
 \hline
 $a_{m-1}\ldots a_{(t-1)W}$ & $\ldots$ & $a_{2W-1}\ldots a_{W}$& $a_{W-1}\ldots a_{0}$     \\
@@ -333,12 +379,12 @@ $a_{m-1}\ldots a_{(t-1)W}$ & $\ldots$ & $a_{2W-1}\ldots a_{W}$& $a_{W-1}\ldots a
 \end{tabular}
 
   \caption{Réprensentation sous forme de tableau de mots de $W$-bit d'un élément de $\mathbb{F}_{2^m}$}
-  
+
     \label{field element as an array}
     \end{center}
 \end{figure}
 
-On donne un exemple en considérant le polynôme $a(z) = x^{40} + x^{35} + x^{30} + x^{5} + x +1$ sur une architecture $32$-bit. On va avoir besoin de $2$ mots de $32$ bits pour représenter ce polynôme. 
+On donne un exemple en considérant le polynôme $a(z) = x^{40} + x^{35} + x^{30} + x^{5} + x +1$ sur une architecture $32$-bit. On va avoir besoin de $2$ mots de $32$ bits pour représenter ce polynôme.
 
 \begin{align*}
 A[0] &= 01000000000000000000000000100011 = 1073741859 \\
@@ -346,22 +392,185 @@ A[1] &= 00000000000000000000000100001000 = 264 \\
 A &= [264, 1073741859 ]
 \end{align*}
 
+On va aintenant présenter quelques algorithmes dans ces corps, certains algorithme ou des versions améliorées de ces derniers feront l'objet d'une vectorisation pour améliorer leurs performances, mais ceci sera abordé dans la partie suivante.
+
+\subsection{Carré de polynôme}
+On travaille sur un corps de caractéristique deux, donc la mise au carré est une opération linéaire grâce au Frobenius, c'est a dire que l'on a:
+
+\begin{align*}
+    a(z)^2 &= (a_{m-1}z^{m-1} + \ldots + a_1z + a_0)^2 \\
+           &= a_{m-1}z^{2m-2} + \ldots + a_1z^2 + a_0
+\end{align*}
+Le polynôme n'a alors que des coefficients d'indice pair. En reprennant notre notation sous forme de tableau, on a inséré un $0$ entre chaque élément, ce qu'on résume avec le schéma suivant:
+
+\newpage
+\begin{figure}
+    \centering
+\begin{tikzpicture}
+\foreach \x in {0,...,4}{
+\draw (2+\x,0.5) rectangle (3+\x,-0.5);
+}
+\foreach \y in {0,...,9}{
+\draw (-0.5+\y,-2.5) rectangle (0.5+\y,-3.5);
+}
+
+     \node (A) at (2.5, 0) {$a_{m-1}$};
+     \node (B) at (3.5, 0) {$a_{m-2}$};
+     \node at (4.5, 0) {$\ldots$};
+     \node (C) at (5.5,0) {$a_{1}$};
+     \node (D) at (6.5, 0) {$a_{0}$};
+
+     \node at (0, -3) {$0$};
+     \node (E) at (1, -3) {$a_{m-1}$};
+     \node at (2, -3) {$0$};
+     \node (F) at (3,-3) {$a_{m-2}$};
+     \node at (4, -3) {$0$};
+       \node at (5, -3) {$\ldots$};
+     \node at (6, -3) {$0$};
+     \node (G) at (7,- 3) {$a_1$};
+     \node at (8,-3) {$0$};
+     \node (H) at (9, -3) {$a_{0}$};
+
+\draw[->]
+(A) edge (E) (B) edge (F) (C) edge (G) (D) edge (H);
+ \end{tikzpicture}
+    \caption{Représentation du calcul du carré de $a(z)$ dans le corps binaire}
+    \label{fig:squaring}
+\end{figure}
+
+
+On va présenter l'algorithme pour une architecture $32$-bits.
+
+\begin{algorithm}
+\caption{Calcul du carré d'un polynôme}
+\begin{algorithmic}
+\REQUIRE Un polynôme binaire $a(z)$ de degré au plus $m-1$
+\ENSURE $c(z) = a(z)^2$
+\STATE Précalcul. Pour chaque byte $d=(d_7,\ldots, d_0)$ calcul $T(d) = (0,d_7,\ldots,0,d_0)$ sur 16-bits.
+\FORALL{$0 \leq i \leq t-1$}
+\STATE On pose $A[i] = (u_3, \ldots, u_0)$ où chaque $u_j$ est un byte
+\STATE $C[2i] \leftarrow (T(u_1), T(u_0))$
+\STATE $C[2i+1] \leftarrow (T(u_3), T(u_2))$
+\ENDFOR
+\STATE Retourne $c$
+\end{algorithmic}
+\end{algorithm}
+
+Pour accelerer l'execution de l'algorithme on fait une phase de précalcul en créeant une table de $512$ bytes représentant le carré de chaque polynôme sur $8$-bits.
+
 \section{Optimisation}
 
-\subsection{AVX}
+\subsection{SSE/AVX}
 
 \subsubsection{Introduction}
 
-AMD et Intel ont incorporé un jeu d'instruction de l'architecture x86 dans leur CPU en 2011, l'AVX, pour Advanced Vector Extensions. Le but est de réaliser des opérations SIMD (single instruction, multiple data) pour effectuer des opération efficacement sur plusieurs valeurs à la fois.
-\newline 
-Les processeurs X86-64 supportant l'avx possède $16$ registres de $256$ bits nommé YMM0-YMM15, la partie basse de ces registres ($128$ bits) correspond aux registres XMM. La plupart des instructions avx peuvent utiliser les registres YMM et XMM comme des opérateurs SIMD. La plupart des instructions \url{avx} utlisent trois opérateurs et se retrouvent sous cette forme:
-$$ \text{InstrMnemonic Des0p, Src0p1, SrcOp2} $$ 
-InstrMnemonic fait référence a la fonction qu'on va utliser, Des0p la déstination, et Src0p1, SrcOp2 les sources? Il est interessant de noter que les sources sont non-destructives, c'est a dire qu'au cours de l'execution de InstrMnemonic les sources ne sont pas modifiées.
+L'utilisation des registres du CPU pour faire de la vectorisation a démarré en 1997 avec le jeu d'instruction MMX. Le but est de réaliser des opérations SIMD (single instruction, multiple data) pour effectuer des opérations efficacement sur plusieurs valeurs à la fois. On veut transfomer des opérations scalaires en opérations vectorielles. Par la suite les instructions \url{SSE} (Streaming SIMD extension) permettant de manipuler des registres de $128$-bits sont sorti. Ces instructions utilisent $16$ registres de $128$-bits, ce sont les registres XMM0-15. AMD et Intel ont incorporé un jeu d'instruction de l'architecture x86 dans leur CPU en 2011, l'AVX, pour Advanced Vector Extensions.
+Les processeurs x86-64 supportant l'\url{AVX} possède $16$ registres de $256$ bits nommé YMM0-YMM15, la partie basse de ces registres ($128$ bits) correspond aux registres XMM. La plupart des instructions \url{SSE}-\url{AVX} peuvent utiliser les registres YMM et XMM comme des opérateurs SIMD. La plupart des instructions \url{AVX} utlisent trois opérateurs et se retrouvent sous cette forme:
+$$ \text{InstrMnemonic Des0p, Src0p1, SrcOp2} $$
+InstrMnemonic fait référence à la fonction qu'on va utliser, Des0p la destination, et Src0p1, SrcOp2 les sources. Il est interessant de noter que les sources sont non-destructives, c'est a dire qu'au cours de l'execution de InstrMnemonic les sources ne sont pas modifiées. Ces instructions se reposent sur des instructions d'assembleur ce qui en fait leur gros point fort. On obtient un controle d'assez bas niveau pour optimiser nos algorithmes sans avoir besoin d'écrire du code assembleur.
+
+\vspace{1cm}
+Les instructions \url{SSE} ont ajoutés trois types: \url{__m128}, \url{__m128d}, \url{__m128i} correspondant à des types float, double et entiers.
+\newline
+Les instructions \url{AVX} ont ajoutés trois types: \url{__m256},  \url{__m256d}, \url{__m256i} correspondant à des types float, double et entiers.
+\newline
+On résume dans les tableaux suivantle nombre de donnée qu'on peut mettre dans des vecteurs XMM et YMM:
 
 
-On peut illuster ca avec un exemple simple, additionner deux listes d'entiers sur $64$ bits, on initalise d'abord les paramètres:
+
+\begin{figure}[h!]
+    \centering
+\begin{tikzpicture}
+\foreach \x in {0,...,3}{
+\draw [very thick, fill = blue] (1+4*\x,0.5) rectangle (5+4*\x,-0.5);
+\node at (3+4*\x,0) {Float};
+\draw [very thick, fill = red] (1+4*\x,-5.5) rectangle (5+4*\x,-6.5);
+\node at (3+4*\x,-6) {Int};
+}
+
+\foreach \x in {0,...,1}{
+\draw [very thick, fill = green] (1+8*\x,-1) rectangle (9+8*\x, -2);
+\node at (5+8*\x,-1.5) {Double};
+\draw [very thick, fill = red] (1+8*\x,-7) rectangle (9+8*\x, -8);
+\node at (5+8*\x,-7.5) {Long long};
+}
+
+\foreach \x in {0,...,15}{
+\draw [very thick, fill = red] (1+\x,-2.5) rectangle (2+\x, -3.5);
+\node at (1.5+\x,-3) {B};
+}
+
+\foreach \x in {0,...,7}{
+\draw [very thick, fill = red] (1+2*\x,-4) rectangle (3+2*\x, -5);
+\node at (2+2*\x,-4.5) {Short};
+}
+
+\draw [very thick, fill = red] (1,-8.5) rectangle (17, -9.5);
+\node at (9,-9) {Doublequadword};
+
+ \end{tikzpicture}
+    \caption{Type de données SSE (16 registres XMM de 128-bits)}
+    \label{fig:SSE table}
+\end{figure}
+
+Pour des données utilisant un type \url{AVX} il suffit de doubler le nombre de données du tableau précédent. Par la suite les instructions \url{AVX2} ont vu le jour permettant d'etendre la majorité des instructions \url{AVX} et \url{SSE} sur 128-bits à 256. Elles ont aussi permis d'ajouter des onfctions d'extractions de donnée sur $32$ et $64$ bits en mémoire non contigues, la diffusion et la permutation de données entre plusieurs mots de 64 bits et des instructions de décalage. Plus recemment les instructions \url{AVX-512} ont vu le jour. Elles permettent de doubler le nombre de registres SIMD utilisés passant de $16$ à $32$ mais aussi de doubler la taille de ces registres à $512$-bits au lieu de $256$.
+\newline
+On va illuster l'utilisation d'instructions \url{AVX2} avec un exemple simple, additionner deux tableaux d'entiers contenant quatres entiers sur $64$-bits.
+
+\vspace{1cm}
+
+Si on refléchi d'un point de vue scalaire on ajoute un à un chaque élément des deux tableaux.
+\vspace{1cm}
+\begin{figure}[h!]
+    \centering
+\begin{tikzpicture}
+\foreach \x in {0,...,3}{
+\draw [very thick, fill = gray!20] (1+4*\x,0.5) rectangle (3+4*\x,-0.5);
+\node at (2+4*\x,0) {A[\x]};
+\node at (2+4*\x,-1.25) {$+$};
+\draw [very thick, fill=gray!40] (1+4*\x,-2) rectangle (3+4*\x,-3);
+\node at (2+4*\x,-3.75) {$=$};
+\node at (2+4*\x,-2.5) {B[\x]};
+\draw [very thick, fill=gray!60] (1+4*\x,-4.5) rectangle (3+4*\x,-5.5);
+\node at (2+4*\x,-5) {C[\x]};
+}
+
+ \end{tikzpicture}
+    \caption{Addition de deux tableaux version scalaire}
+    \label{fig:scalar addition}
+\end{figure}
+\vspace{1cm}
+\newline
+Si on travaille avec des instructions SIMD on va faire toutes ces additions d'un seul coup:
+\vspace{1cm}
+
+\begin{figure}[h!]
+    \centering
+\begin{tikzpicture}
+\foreach \x in {0,...,3}{
+\draw [very thick, fill = gray!20] (1+4*\x,0.5) rectangle (5+4*\x,-0.5);
+\node at (3+4*\x,0) {A[\x]};
+\draw [very thick, fill = gray!40] (1+4*\x,-2) rectangle (5+4*\x,-3);
+\node at (3+4*\x,-2.5) {B[\x]};
+\draw [very thick, fill = gray!60] (1+4*\x,-4.5) rectangle (5+4*\x,-5.5);
+\node at (3+4*\x,-5) {C[\x]};
+\node at (9,-1.25) {$+$};
+\node at (9,-3.75) {$=$};
+}
+
+ \end{tikzpicture}
+    \caption{Addition de deux tableaux version SIMD}
+    \label{fig:SIMD addition}
+\end{figure}
+
+
+
+
+
+\vspace{1cm}
+On va illustrer cet exemple avec une implémentation en utilisant des tableaux de type $64$-bits, on initalise d'abord les paramètres:
 \medskip
-\begin{lstlisting}[language = c]
+\begin{lstlisting}[style = Cstyle]
   uint64_t tab1[4] = {1534345, 14300953, 104002000, 193294};
   uint64_t tab2[4] = {4843838, 74646, 89878971, 77777777777};
   uint64_t result[4] = {0};
@@ -369,49 +578,235 @@ On peut illuster ca avec un exemple simple, additionner deux listes d'entiers su
   __m256i b = _mm256_set_epi64x(4843838, 74646, 89878971, 77777777777);
   __m256i c;
 \end{lstlisting}
-Nos deux premiers tableau sont simplement des tableaux de $4$ entiers non signé codés sur $64$ bits. On veut l'équivalent en utilisant le jeu d'instruction avx2. On va mettre nos valeurs dans un vecteur de longueur $4$. En effet \url{__m256i} correspond à un vecteur pouvant contenir $256$ bits, soit $4$ \url{uint64_t}.
-La méthode classique pour additionner deux tableaux consistent a utiliser une boucle \url{for} pour les parcourir et additionner chaque élément:
+\vspace{1cm}
+
+Nos deux premiers tableaux sont simplement des tableaux de $4$ entiers non signé codés sur $64$ bits. On veut l'équivalent en utilisant le jeu d'instruction \url{AVX}. On va mettre nos valeurs dans un vecteur de longueur $4$. En effet \url{__m256i} correspond à un vecteur pouvant contenir $256$ bits, soit $4$ \url{uint64_t}.
+La méthode classique pour additionner deux tableaux consistent à utiliser une boucle \url{for} pour les parcourir et additionner chaque élément:
 \medskip
-\begin{lstlisting}
+\begin{lstlisting}[style = Cstyle]
 for(int i = 0; i < 4; ++i){
     result[i] = tab1[i] + tab2[i];
-} 
+}
 \end{lstlisting}
-En utlisant avx2 on a tout simplement l'instruction suivante: 
+\vspace{1cm}
+En utlisant avx2 on a tout simplement l'instruction suivante:
 \medskip
-\begin{lstlisting}
+\begin{lstlisting}[style = Cstyle]
 c = _mm256_add_epi64(a, b);
 \end{lstlisting}
-Pour démontrer l'utiliser de telles instructions reste à comparer le temps d'execution de nos deux méthodes. On choisit de plutot afficher le nombre de cycle cpu pour réaliser la tache plutot qu'un temps en milliseconde. On obtient les résultats suivant:
+\vspace{1cm}
+Pour démontrer l'utilité de telles instructions reste à comparer le temps d'execution de nos deux méthodes. On choisit de plutot afficher le nombre de cycle cpu pour réaliser la tache plutot qu'un temps en milliseconde. On obtient les résultats suivant:
 \begin{lstlisting}
 CPU Cycles boucle: 468 CPU cycles
 CPU Cycles avx2: 76 CPU cycles
 \end{lstlisting}
-On voit bien le jeu d'instruction avx2 permet d'acceler certaines taches. 
+On voit bien le jeu d'instruction \url{AVX} permet d'accelèrer certaines tâches.
+\newline
+Pour se convaincre que ces fonctions font bien appel aux registres YMM, XMM et qu'elles réalisent bien la tache demander on fait un petit tour par de l'assembleur. On utilise \url{gdb} pour désassembler le programme suivant :
+\vspace{1cm}
+\begin{lstlisting}[style=CStyle]
+int main(){
+  __m256i a = _mm256_set_epi64x(1534345, 14300953, 104002000, 193294);
+  __m256i b = _mm256_set_epi64x(4843838, 74646, 89878971, 77777777777);
+  __m256i c;
+  c = _mm256_add_epi64(a, b);
+}
+\end{lstlisting}
+\vspace{1cm}
+On note en hexadécimal les entrées de nos deux vecteurs:
+$$a=\{0\mathrm{x}176989, 0\mathrm{xDA}3719, 0\mathrm{x}632\mathrm{F}1\mathrm{D}0, 0\mathrm{x}2\mathrm{F}30\mathrm{E} \};$$
+et,
+$$b=\{0\mathrm{x}49\mathrm{E}93\mathrm{E}, 0\mathrm{x}12396, 0\mathrm{x}55\mathrm{B}71\mathrm{BB}, 0\mathrm{x}121\mathrm{BEAB}471\};$$
+
+On va dans un premier temps s'intéresser à la fonction d'initialisation \url{__mm256_set_epi64x}. On saute l'initialisation de la stack frame pour passer directement aux opérations intéressantes.
+
+\vspace{1cm}
+\begin{lstlisting}{frame = single, style = Astyle}
+   0x0000555555554611 <+23>:	movq   $0x176989,-0xd0(%rbp)
+   0x000055555555461c <+34>:	movq   $0xda3719,-0xc8(%rbp)
+   0x0000555555554627 <+45>:	movq   $0x632f1d0,-0xc0(%rbp)
+   0x0000555555554632 <+56>:	movq   $0x2f30e,-0xb8(%rbp)
+   0x000055555555463d <+67>:	mov    -0xd0(%rbp),%rax
+\end{lstlisting}
+\vspace{1cm}
+
+On remarque qu'on stock des quadword représentant les entrées de $a$ dans le registre \textbf{rbp} avec un offset de $|0\mathrm{xc}8 - 0\mathrm{xd}0| = 8$ bytes $ = 64$ bits. On va aussi stocker dans \textbf{rax} $a[0]$.
+
+\vspace{1cm}
+\begin{lstlisting}{frame = single, style = Astyle}
+   0x0000555555554644 <+74>:	vmovq  -0xc8(%rbp),%xmm0
+   0x000055555555464c <+82>:	vpinsrq $0x1,%rax,%xmm0,%xmm1
+   0x0000555555554652 <+88>:	mov    -0xc0(%rbp),%rax
+   0x0000555555554659 <+95>:	vmovq  -0xb8(%rbp),%xmm0
+   0x0000555555554661 <+103>:	vpinsrq $0x1,%rax,%xmm0,%xmm0
+   0x0000555555554667 <+109>:	vinserti128 $0x1,%xmm1,%ymm0,%ymm0
+   0x000055555555466d <+115>:	vmovdqa %ymm0,-0xb0(%rbp)
+  \end{lstlisting}
+  \vspace{1cm}
+ La ligne $<+74>$ indique qu'on stock $a[1]$ dans \textbf{xmm0}. L'instruction \textbf{vpinsrq} correspond à l'insertion d'un quadword contenu dans \textbf{rax} dans \textbf{xmm0} avec un offset de $1$. Et cette insertion est ensuite envoyée dans le registre \textbf{xmm1}. On a donc $\{a[1], a[0]\}$ dans \textbf{xmm1}. On va ensuite mettre $a[3], a[2]$ dans respectivement \textbf{xmm0} et \textbf{rax}. Et cette fois ci après la ligne $<+103>$ on a $\{a[3], a[2]\}$ dans \textbf{xmm0}. Reste ensuite a combiner ces deux registres en utilisant \textbf{vinserti128}. On rappelle que \textbf{xmm0} correspond à la partie basse de \textbf{ymm0}. On insère donc \textbf{xmm1} dans \textbf{ymm0} pour obtenir \textbf{ymm0} $= \{ a[3], a[2], a[1], a[0] \}$. Et on va juste stocker en mémoire le contenu de ce registre à l'adresse $-0\mathrm{xb}0(\%\mathrm{rbp})$.
+  \vspace{1cm}
+ \begin{lstlisting}{frame = single, style = Astyle}
+   0x0000555555554675 <+123>:	movq   $0x49e93e,-0xf0(%rbp)
+   0x0000555555554680 <+134>:	movq   $0x12396,-0xe8(%rbp)
+   0x000055555555468b <+145>:	movq   $0x55b71bb,-0xe0(%rbp)
+   0x0000555555554696 <+156>:	movabs $0x121beab471,%rax
+   0x00005555555546a0 <+166>:	mov    %rax,-0xd8(%rbp)
+   0x00005555555546a7 <+173>:	mov    -0xf0(%rbp),%rax
+   0x00005555555546ae <+180>:	vmovq  -0xe8(%rbp),%xmm0
+   0x00005555555546b6 <+188>:	vpinsrq $0x1,%rax,%xmm0,%xmm1
+   0x00005555555546bc <+194>:	mov    -0xe0(%rbp),%rax
+   0x00005555555546c3 <+201>:	vmovq  -0xd8(%rbp),%xmm0
+   0x00005555555546cb <+209>:	vpinsrq $0x1,%rax,%xmm0,%xmm0
+   0x00005555555546d1 <+215>:	vinserti128 $0x1,%xmm1,%ymm0,%ymm0
+   0x00005555555546d7 <+221>:	vmovdqa %ymm0,-0x90(%rbp)
+ \end{lstlisting}
+\vspace{1cm}
+On fait exactement la même chose avec les entrées de $b$ et on stock le contenu du registre \textbf{ymm0} contenant nos $4$ entiers de $64$ bits sous forme de vecteur de $256$-bits à l'adresse $-0\mathrm{x}90(\%\mathrm{rbp})$.
+\vspace{1cm}
+\begin{lstlisting}[style = Astyle]
+   0x00005555555546df <+229>:	vmovdqa -0xb0(%rbp),%ymm0
+   0x00005555555546e7 <+237>:	vmovdqa %ymm0,-0x50(%rbp)
+   0x00005555555546ec <+242>:	vmovdqa -0x90(%rbp),%ymm0
+   0x00005555555546f4 <+250>:	vmovdqa %ymm0,-0x30(%rbp)
+   0x00005555555546f9 <+255>:	vmovdqa -0x50(%rbp),%ymm1
+   0x00005555555546fe <+260>:	vmovdqa -0x30(%rbp),%ymm0
+\end{lstlisting}
+\vspace{1cm}
+Les instructions précédentes vont chercher en mémoire nos vecteurs de $256$-bits contenant $a$ et $b$, les re-aligner en mémoire à  $-0\mathrm{x}50(\%\mathrm{rbp})$ et $-0\mathrm{x}30(\%\mathrm{rbp})$ (la différence des ces deux adresses est de $32$ bytes soit $256$ bits) puis vont mettre leur contenu dans les registres \textbf{ymm1} et \textbf{ymm0}. On peut enfin procéder à l'addition de ces deux registres pour obtenir le resultat final.
+
+\begin{lstlisting}[style = Astyle]
+   0x0000555555554703 <+265>:	vpaddq %ymm0,%ymm1,%ymm0
+   0x0000555555554707 <+269>:	vmovdqa %ymm0,-0x70(%rbp)
+\end{lstlisting}
+\subsection{Applications}
+La vetorisation d'un algorithme permet d'accelerer le temps d'execution de ce dernier. On pourrrait reprend les algorithmes présentés dans la section précédente et les vectoriser en utilisant un jeu d'instruction SSE/AVX. Cependant pour tirer le plus grand avantage possible de la vectorisation il est interessant d'essayer de modifier ces algorithmes pour utiliser des opérations extremement rapide en SSE/AVX, notemment le "shuffle" et le "byte interleaving". Penser les algorithmes de manière vectorisé peut etre plus efficace que simplement vectoriser un algorithme général.
+
+\subsubsection{Carré d'un polynôme}
+La première optimisation dont nous allons parler est le calcul du carré d'un polynôme $a(z)$. L'idée est de regrouper les coefficients de $a(z)$ par groupe de quatre. Ceci va nous permettre d'utiliser au mieux les instruction PLTU. Pour se faire il faut séparer notre polynôme de la manière suivante:
+
+$$ a(z) = a_H(z)z^4 + a_L(z) $$
+Où les $a_L$ stockent tous les $4$ bits de poids faible des bytes de la forme compacte de $a$, et $a_H$ les $4$ bits de poids fort. Soit :
+
+$$ a_L = \sum_{0 \leq i\pmod 8 \leq 3} a_iz^i $$
+et,
+$$ a_h = \sum_{4 \leq i\pmod 8 \leq 7} a_iz^{i-4} $$
+
+Dans $\mathbb{F}_{2^m}$ le carré est une opération linéaire par le Frobenius. On peut donc re-écrire $a(z)^2$ comme:
+
+$$ a(z)^2 = a_H(z)^2z^8 + a_L(z)^2  $$
+
+Calculer le carré de $a(z)$ revient donc à calculer les carrés de $a_L$ et $a_H$ avec un offset de $8$-bits. Le calcul des carrés $a_L$ et $a_H$ se fait comme dans l'algorithme de la section précédente en utilisant une "lookup table" de $16$ byte. Chaque groupe de $4$ bits est ainsi étendu en $8$ bits en appellant cette table. L'instruction "byte shuffling" prend deux arguments en entrée, ici se sera notre lokkup\_table et repsectivement $a_L$ et $a_H$ lors des deux appels différents. La phase de précalcul consiste à créer cette lookup\_table. La construction est relativement simple, on prend tous les polynômes possibles sur $4$-bits, soit $2^4=16$ polynômes, et pour chacun de ces polynôme on calcul leur carré. Ce qui consiste à ajouter un $0$ entre deux bits consécutifs de la representation du polynôme. On se retrouve donc avec $16$ polynôme sur $8$-bits qu'on peut donc mettre dans notre lookup\_table de $16\times8 = 128$-bits.  On pourra utiliser les instructions PLTU pour executer simultanément des appels à la table. \newline
+On passe a l'algortihme un polynôme $a$ sous forme d'un vecteur de n mots de $64$-bits ou $\frac{n}{2}$ de $128$-bits. L'algortihme va charger dans un premier temps 128-bits de $a$ et la convertir sous la forme séparée $a_L$, $a_H$ en utilisant un masque. On appel ensuite notre lookup\_table sur $a_l$ et $a_H$ pour calculer leur carré, et l'addition final de $8$ bits peut se faire en utilisant des instructions "interleaving". On obtient l'algorithme suivant:
+
+\begin{algorithm}
+\caption{Optimisation du calcul du carré d'un polynôme}
+\begin{algorithmic}
+\REQUIRE Un polynôme binaire $a(z)$ de degré au plus $m-1$ sous la forme $a(z)=a[0\ldots n-1]$
+\ENSURE $c(z) = a(z)^2$
+\STATE table $\leftarrow$ (0x5554515045444140, 0x1514111005040100)
+\STATE mask $\leftarrow$ (0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F)
+\FORALL{$0 \leq i \leq \frac{n}{2}-1$}
+\STATE $a_0 \leftarrow load(a[2i])$
+\STATE $a_L \leftarrow a_0$ \& mask
+\STATE  $a_H \leftarrow (a_0 >> 4)$ \& mask
+\STATE  $a_L \leftarrow $ lookup(table, $a_L$)
+\STATE  $a_H \leftarrow $ lookup(table, $a_H$)
+\STATE $t[2i] \leftarrow $ interlo($a_L, a_H)$
+\STATE $t[2i+1] \leftarrow $ interhi($a_L, a_H)$
+\ENDFOR
+\STATE Retourne $c$
+\end{algorithmic}
+\end{algorithm}
+Une implémentation possible en utilisant les fonctions intrinsics INTEL est:
+
+
+\begin{lstlisting}[style = Cstyle]
+void square2(__m128i *o, __m128i *a, int size){
+
+   __m128i mask = _mm_set_epi64x(0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F);
+   __m128i lookup_table = _mm_set_epi64x(0x5554515045444140, 0x1514111005040100);
+
+   for(int i = 0; i <= size/2 - 1; i++){
+
+     __m128i a_0 =  _mm_stream_load_si128(&a[i]);
+     __m128i a_l = _mm_and_si128(a_0, mask);
+     __m128i a_h = _mm_and_si128(_mm_srli_epi64(a_0, 4), mask);
+
+     a_l = _mm_shuffle_epi8(lookup_table, a_l);
+     a_h = _mm_shuffle_epi8(lookup_table, a_h);
+
+     o[2*i] = _mm_unpacklo_epi8(a_l, a_h);
+     o[2*i+1] = _mm_unpackhi_epi8(a_l, a_h);
+  }
+}
+\end{lstlisting}
+
+\subsubsection{Racine carré d'un poynôme}
+La méthode basique pour calculer la racine de $a \in \mathbb{F}_{2^m}$ est d'utiliser les propriétés du Frobenius. En effet, $a = a^{2^m}$. Ainsi on peut calculer $\sqrt{a}$ en utilisant $m-1$ mise au carré avec $\sqrt{a} = a ^{2^{m-1}}$. Mais on peut avoir un algorithme plus efficace en faisant les remarques suivantes. La racine carré est l'inverse de la fonction carré, dans $\mathbb{F}_{2^m}$ c'est aussi une application linéaire. On va donc utiliser la meme idée que pour le carré: créer une representation séparée et faire des appels à une "lookup\_table".
+\newline La répresentation séparée est:
+\begin{equation}
+\label{split/root/l-h}
+\sqrt{a(z)} = \sqrt{a_Hz^4 + a_L(z)} = \sqrt{a_H(z)} \cdot z^2 + \sqrt{a_L(z)}
+\end{equation}
+
+
+Dans un premier temps on remarque que calculer $\sqrt{a(z)}$ peut se faire en calculant $\sqrt{a(z)}=a_{\text{even}} + \sqrt{z} \cdot a_{\text{odd}}$. En effet, on a:
+
+\begin{align*}
+    a(z) &= \sum_{i=0}^{2^m - 1}a_i z^i \\
+        &= \sum_{i=0}^{\frac{2^m - 1}{2}}a_{2i}z^{2i} + \sum_{i=0}^{\frac{2^m - 3}{2}}a_{2i+1}z^{2i+1} \\
+        &= a_{\text{even}}^2 +z \cdot a_{\text{odd}}^2
+\end{align*}
+
+Ainsi,
+\begin{equation}
+\label{split/root/even_odd}
+     \sqrt{a(z)} = a_{\text{even}} + \sqrt{z} \cdot a_{\text{odd}}
+\end{equation}
+
+
+En combinant \eqref{split/root/l-h} et \eqref{split/root/even_odd} on obtient la formule suivante:
+
+\begin{equation*}
+    \sqrt{a(z)} = \sqrt{z} \cdot (a_{L_{\text{odd}}}(z) + a_{H_{\text{odd}}}(z) z^2) + a_{L_{\text{even}}}(z) + a_{H_{\text{even}}}(z) z^2
+\end{equation*}
+
+
+\begin{algorithm}
+\caption{Optimisation du calcul du calcul de la racine carrré d'un polynôme}
+\begin{algorithmic}
+\REQUIRE $a(z)=a[0\ldots n-1]$
+\ENSURE $c(z) = \sqrt{a(z)}$
+\STATE perm $\leftarrow$ (0x0F0D0B0907050301, 0x0E0C0A0806040200)
+\STATE $sqrt_L\leftarrow$ (0x3332232231302120, 0x1312030211100100)
+\STATE $sqrt_H \leftarrow$ (0x0CCC88C88C4C08480, 0x4C480C0844400400)
+\STATE $mask_L \leftarrow$ (0x0F0F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F)
+\STATE $mask_H \leftarrow$ (0xF0F0F0F0F0F0F0F0, 0xF0F0F0F0F0F0F0F0)
+\STATE $a_{\text{even}} \leftarrow 0$
+\STATE $a_{\text{odd}} \leftarrow 0$
+\FORALL{$0 \leq i \leq \frac{n}{2}-1$}
+\STATE $a_0 \leftarrow load(a[2i])$
+\STATE $a_0 \leftarrow shuffle(a_0, perm)$
+\STATE $a_L \leftarrow a_0$ \& $mask_L$
+\STATE $(a_0$ \& $mash_H) >> 4$
+\STATE $a_L \leftarrow$ lookup($sqrt_L, a_L)$
+\STATE $a_H \leftarrow$ lookup($sqrt_H, a_H)$
+\STATE $a_0 \leftarrow a_0 \oplus a_H$
+\STATE $a_L \leftarrow a_0$ \& $mask_L$
+\STATE $a_H \leftarrow a_0$ \& $mask_H$
+\STATE $ u \leftarrow store(a_L)$
+\STATE $ v \leftarrow store(a_H)$
+\STATE $a_{\text{even}} \leftarrow a_{\text{even}} + (u[0] \, | \, (u[1] << 4 )) $
+\STATE $a_{\text{odd}} \leftarrow a_{\text{odd}} + (v[1] \, | \, (v[0] >> 4 )) $
+\ENDFOR
+\STATE Retourne $c(z) =a_{\text{even}} + \sqrt{z} \cdot a_{\text{odd}} $
+\end{algorithmic}
+\end{algorithm}
+
+
+
 \newpage
 %\bibliographystyle{plain}
 %\bibliography{biblio}
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
